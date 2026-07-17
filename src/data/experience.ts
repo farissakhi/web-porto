@@ -47,14 +47,26 @@ export const education: Education[] = [
 export const organizations: Organization[] = [
   {
     id: "org-1",
-    name: "", // TODO: nama organisasi/komunitas/UKM
-    logo: "", // TODO: path logo organisasi, contoh "/logos/org.png"
-    role: "", // TODO: contoh "Ketua Divisi IT"
-    startDate: "", // TODO: contoh "Jan 2023"
-    endDate: "", // TODO: contoh "Dec 2023" atau "Present"
-    description: "", // TODO: deskripsi singkat peran & tanggung jawab
+    name: "Organisasi Mahasiswa (Contoh)", // TODO: Isi nama organisasinya
+    logo: "",
+    role: "Vice Chairperson",
+    startDate: "Jan 2024", // TODO: Sesuaikan tanggal
+    endDate: "Present",
+    description: "Assisting the Chairperson in leading the organization and managing internal and external affairs...", // TODO: Sesuaikan deskripsi
     achievements: [
-      // TODO: pencapaian selama di organisasi (bullet points singkat)
+      // TODO: Isi pencapaian
+    ],
+  },
+  {
+    id: "org-2",
+    name: "Organisasi Mahasiswa (Contoh)", // TODO: Isi nama organisasinya
+    logo: "",
+    role: "Member of Student Welfare Advocacy",
+    startDate: "Jan 2023", // TODO: Sesuaikan tanggal
+    endDate: "Dec 2023",
+    description: "Advocating for student rights and welfare, mediating between students and the faculty...", // TODO: Sesuaikan deskripsi
+    achievements: [
+      // TODO: Isi pencapaian
     ],
   },
 ];
