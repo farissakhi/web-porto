@@ -6,6 +6,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import HeroSection from "@/components/HeroSection";
 import SkillsSection from "@/components/SkillsSection";
 import ProjectsSection from "@/components/ProjectsSection";
+import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
         <div className="section-divider" />
         <SkillsSection />
         <ProjectsSection />
+        <ExperienceSection />
         <ContactSection />
       </main>
     </motion.div>
