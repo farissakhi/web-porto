@@ -14,7 +14,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
 
       const sections = profile.navLinks.map((link) =>
         link.href.replace("#", "")
@@ -53,29 +53,38 @@ export default function Navbar() {
     <>
       {/* Floating Pill Navbar */}
       <motion.header
-        initial={{ y: -60, opacity: 0 }}
+        initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" as const, delay: 0.2 }}
+        transition={{ duration: 0.7, ease: "easeOut" as const, delay: 0.3 }}
         className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-4xl"
       >
-        <nav
-          className={`flex items-center justify-between px-4 sm:px-5 h-12 sm:h-14 rounded-full transition-all duration-500 ${
+        <motion.nav
+          animate={{
+            paddingTop: scrolled ? "0.375rem" : "0.5rem",
+            paddingBottom: scrolled ? "0.375rem" : "0.5rem",
+            paddingLeft: scrolled ? "1rem" : "1.25rem",
+            paddingRight: scrolled ? "1rem" : "1.25rem",
+          }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+          className={`flex items-center justify-between rounded-full transition-all duration-500 ${
             scrolled
-              ? "glass shadow-[0_0_30px_rgba(0,0,0,0.3)]"
-              : "bg-card/80 backdrop-blur-xl border border-border"
+              ? "glass shadow-[0_0_30px_rgba(0,0,0,0.4)] border-muted-foreground/10"
+              : "bg-card/60 backdrop-blur-xl border border-border"
           }`}
         >
           {/* Logo / Name */}
-          <a
+          <motion.a
             href="#home"
             onClick={(e) => {
               e.preventDefault();
               handleNavClick("#home");
             }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             className="text-sm font-bold tracking-tight hover:opacity-70 transition-opacity shrink-0"
           >
             {profile.name}
-          </a>
+          </motion.a>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-0.5">
@@ -112,19 +121,23 @@ export default function Navbar() {
 
           {/* Right side: Resume + Theme toggle + Hire Me */}
           <div className="hidden md:flex items-center gap-2">
-            <a
+            <motion.a
               href={profile.cvFile}
               download
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               className="flex items-center gap-1 px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground
                          rounded-full border border-border hover:border-muted-foreground/40 transition-all duration-300"
             >
               <FiDownload size={12} />
               Resume
-            </a>
+            </motion.a>
 
-            <button
+            <motion.button
               onClick={toggleTheme}
               aria-label="Toggle theme"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               className="flex items-center justify-center w-7 h-7 rounded-full border border-border
                          hover:border-muted-foreground/40 hover:bg-muted transition-all duration-300"
             >
@@ -143,21 +156,23 @@ export default function Navbar() {
                   )}
                 </motion.div>
               </AnimatePresence>
-            </button>
+            </motion.button>
 
-            <a
+            <motion.a
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick("#contact");
               }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               className="px-4 py-1.5 text-xs font-semibold rounded-full
                          bg-foreground text-background
-                         hover:opacity-90 hover:scale-105
+                         hover:opacity-90
                          transition-all duration-300"
             >
               Hire Me
-            </a>
+            </motion.a>
           </div>
 
           {/* Mobile menu button */}
@@ -177,7 +192,7 @@ export default function Navbar() {
               {mobileOpen ? <FiX size={16} /> : <FiMenu size={16} />}
             </button>
           </div>
-        </nav>
+        </motion.nav>
       </motion.header>
 
       {/* Mobile Menu Overlay */}
@@ -203,10 +218,13 @@ export default function Navbar() {
               className="absolute top-0 right-0 w-72 h-full bg-card border-l border-border p-6 pt-20"
             >
               <div className="flex flex-col gap-2">
-                {profile.navLinks.map((link) => (
-                  <a
+                {profile.navLinks.map((link, i) => (
+                  <motion.a
                     key={link.href}
                     href={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05 }}
                     onClick={(e) => {
                       e.preventDefault();
                       handleNavClick(link.href);
@@ -219,31 +237,38 @@ export default function Navbar() {
                       }`}
                   >
                     {link.label}
-                  </a>
+                  </motion.a>
                 ))}
 
                 <hr className="border-border my-3" />
 
-                <a
+                <motion.a
                   href={profile.cvFile}
                   download
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.35 }}
                   className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm text-muted-foreground hover:text-foreground transition-all"
                 >
                   <FiDownload size={14} />
                   Download Resume
-                </a>
+                </motion.a>
 
-                <a
+                <motion.a
                   href="#contact"
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick("#contact");
                   }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  whileTap={{ scale: 0.97 }}
                   className="mt-2 px-5 py-3 text-center text-sm font-semibold rounded-full
                              bg-foreground text-background hover:opacity-90 transition-all"
                 >
                   Hire Me
-                </a>
+                </motion.a>
               </div>
             </motion.div>
           </motion.div>

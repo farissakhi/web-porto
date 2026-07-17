@@ -15,7 +15,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.04 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
@@ -54,7 +54,7 @@ export default function SkillsSection() {
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, amount: 0.2 }}
               className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2.5"
             >
               {category.skills.map((skill) => {
@@ -64,18 +64,25 @@ export default function SkillsSection() {
                     key={skill.name}
                     variants={itemVariants}
                     whileHover={{
-                      y: -3,
+                      y: -4,
+                      boxShadow: "0 4px 20px rgba(255,255,255,0.05)",
+                      borderColor: "rgba(156, 163, 175, 0.3)",
                       transition: { duration: 0.2 },
                     }}
                     className="group flex flex-col items-center gap-2 p-3.5 rounded-xl
                                bg-card border border-border
-                               hover:border-muted-foreground/25 hover:bg-card-hover
-                               transition-all duration-300 cursor-default"
+                               hover:bg-card-hover
+                               transition-colors duration-300 cursor-default"
                   >
-                    <Icon
-                      size={26}
-                      className="text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    />
+                    <motion.div
+                      whileHover={{ scale: 1.15, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    >
+                      <Icon
+                        size={26}
+                        className="text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                      />
+                    </motion.div>
                     <span className="text-[11px] font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 text-center leading-tight">
                       {skill.name}
                     </span>

@@ -1,22 +1,78 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FiDownload, FiArrowRight } from "react-icons/fi";
 import Image from "next/image";
 import SocialIcons from "./SocialIcons";
 import { profile } from "@/data/profile";
 
+const roles = ["Full Stack Developer", "AI/ML Enthusiast", "Problem Solver"];
+const CYCLE_INTERVAL = 3000;
+
+const heroStagger = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.15, delayChildren: 0.4 },
+  },
+};
+
+const heroChild = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" as const },
+  },
+};
+
 export default function HeroSection() {
+  const prefersReduced = useReducedMotion();
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, CYCLE_INTERVAL);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden"
     >
-      {/* Subtle background glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-white/[0.04] rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-white/[0.03] rounded-full blur-[100px]" />
-      </div>
+      {/* Ambient gradient blobs — slow looping motion, very low opacity */}
+      {!prefersReduced && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div
+            animate={{
+              x: [0, 60, -30, 0],
+              y: [0, -40, 20, 0],
+              scale: [1, 1.15, 0.95, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/[0.04] rounded-full blur-[140px]"
+          />
+          <motion.div
+            animate={{
+              x: [0, -50, 40, 0],
+              y: [0, 30, -50, 0],
+              scale: [1, 0.9, 1.1, 1],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-white/[0.03] rounded-full blur-[120px]"
+          />
+        </div>
+      )}
 
       {/* Subtle grid pattern */}
       <div
@@ -30,7 +86,7 @@ export default function HeroSection() {
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 w-full py-20 pt-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left: Profile Image */}
+          {/* Left: Profile Image with floating animation */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -41,34 +97,46 @@ export default function HeroSection() {
               {/* Glow ring */}
               <div className="absolute -inset-4 bg-white/[0.03] rounded-full blur-2xl" />
 
-              {/* Border ring */}
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full p-[2px] bg-gradient-to-b from-white/20 to-white/5">
-                <div className="w-full h-full rounded-full bg-card overflow-hidden border border-border">
-                  <Image
-                    src={profile.profileImage}
-                    alt={profile.name}
-                    width={320}
-                    height={320}
-                    className="w-full h-full object-cover"
-                    priority
-                  />
+              {/* Floating wrapper */}
+              <motion.div
+                animate={
+                  prefersReduced
+                    ? {}
+                    : { y: [0, -10, 0] }
+                }
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {/* Border ring */}
+                <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full p-[2px] bg-gradient-to-b from-white/20 to-white/5">
+                  <div className="w-full h-full rounded-full bg-card overflow-hidden border border-border">
+                    <Image
+                      src={profile.profileImage}
+                      alt={profile.name}
+                      width={320}
+                      height={320}
+                      className="w-full h-full object-cover"
+                      priority
+                    />
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
 
-          {/* Right: Text Content */}
+          {/* Right: Text Content — staggered fade-in on mount */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" as const }}
+            variants={heroStagger}
+            initial="hidden"
+            animate="visible"
             className="text-center lg:text-left order-2"
           >
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              variants={heroChild}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-card mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -77,30 +145,56 @@ export default function HeroSection() {
               </span>
             </motion.div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4">
+            <motion.h1
+              variants={heroChild}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4"
+            >
               Hi, I&apos;m{" "}
               <span className="text-foreground">{profile.name}</span>
-            </h1>
+            </motion.h1>
 
-            <div className="flex items-center gap-3 justify-center lg:justify-start mb-6">
+            {/* Cycling role text */}
+            <motion.div
+              variants={heroChild}
+              className="flex items-center gap-3 justify-center lg:justify-start mb-6"
+            >
               <div className="h-px w-8 bg-muted-foreground/50" />
-              <p className="text-lg sm:text-xl font-medium text-muted-foreground">
-                {profile.role}
-              </p>
-            </div>
+              <div className="relative h-7 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={roleIndex}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -16 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="text-lg sm:text-xl font-medium text-muted-foreground whitespace-nowrap"
+                  >
+                    {roles[roleIndex]}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </motion.div>
 
-            <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8">
+            <motion.p
+              variants={heroChild}
+              className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8"
+            >
               {profile.description}
-            </p>
+            </motion.p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3 justify-center lg:justify-start mb-8">
-              <a
+            <motion.div
+              variants={heroChild}
+              className="flex flex-wrap items-center gap-3 justify-center lg:justify-start mb-8"
+            >
+              <motion.a
                 href={profile.cvFile}
                 download
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
                            bg-foreground text-background
-                           hover:opacity-90 hover:scale-105
+                           hover:opacity-90
                            transition-all duration-300"
               >
                 <FiDownload
@@ -108,9 +202,9 @@ export default function HeroSection() {
                   className="group-hover:animate-bounce"
                 />
                 Download CV
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
                 href="#projects"
                 onClick={(e) => {
                   e.preventDefault();
@@ -118,6 +212,8 @@ export default function HeroSection() {
                     .getElementById("projects")
                     ?.scrollIntoView({ behavior: "smooth" });
                 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
                            border border-border text-foreground
                            hover:bg-card hover:border-muted-foreground/30
@@ -128,11 +224,13 @@ export default function HeroSection() {
                   size={16}
                   className="transition-transform group-hover:translate-x-1"
                 />
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
 
             {/* Social Icons */}
-            <SocialIcons showEmail className="justify-center lg:justify-start" />
+            <motion.div variants={heroChild}>
+              <SocialIcons showEmail className="justify-center lg:justify-start" />
+            </motion.div>
           </motion.div>
         </div>
       </div>

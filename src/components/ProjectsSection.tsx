@@ -6,6 +6,28 @@ import { FiGithub, FiExternalLink } from "react-icons/fi";
 import { projects, projectCategories, type ProjectCategory } from "@/data/projects";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
 
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.92, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: "easeOut" as const },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.92,
+    y: 10,
+    transition: { duration: 0.25 },
+  },
+};
+
+const staggerContainer = {
+  visible: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
 export default function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<"all" | ProjectCategory>(
     "all"
@@ -23,7 +45,7 @@ export default function ProjectsSection() {
         subtitle="A selection of projects I've built and contributed to"
       />
 
-      {/* Filter Tabs */}
+      {/* Filter Tabs with animated indicator */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
         {projectCategories.map((cat) => (
           <button
@@ -57,6 +79,9 @@ export default function ProjectsSection() {
       {/* Projects Grid */}
       <motion.div
         layout
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
       >
         <AnimatePresence mode="popLayout">
@@ -64,49 +89,58 @@ export default function ProjectsSection() {
             <motion.div
               key={project.title}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               className="group relative rounded-2xl bg-card border border-border overflow-hidden
-                         hover:border-muted-foreground/20 transition-all duration-300"
+                         hover:border-muted-foreground/20 hover:shadow-[0_4px_24px_rgba(255,255,255,0.03)] transition-all duration-300"
             >
-              {/* Project Thumbnail */}
+              {/* Project Thumbnail with zoom on hover */}
               <div className="relative aspect-video overflow-hidden bg-muted">
-                {/* TODO: Ganti dengan gambar project asli */}
-                <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
-                  <span className="text-xl font-bold text-muted-foreground/30">
-                    {project.title
-                      .split(" ")
-                      .map((w) => w[0])
-                      .join("")}
-                  </span>
-                </div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="w-full h-full"
+                >
+                  <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
+                    <span className="text-xl font-bold text-muted-foreground/30">
+                      {project.title
+                        .split(" ")
+                        .map((w) => w[0])
+                        .join("")}
+                    </span>
+                  </div>
+                </motion.div>
 
                 {/* Hover overlay */}
                 <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100
                                 transition-opacity duration-300 flex items-center justify-center gap-3">
-                  <a
+                  <motion.a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
                                hover:bg-white/20 transition-all duration-200 text-white"
                     aria-label={`GitHub repo for ${project.title}`}
                   >
                     <FiGithub size={18} />
-                  </a>
+                  </motion.a>
                   {project.demoUrl && (
-                    <a
+                    <motion.a
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
                       className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
                                  hover:bg-white/20 transition-all duration-200 text-white"
                       aria-label={`Live demo for ${project.title}`}
                     >
                       <FiExternalLink size={18} />
-                    </a>
+                    </motion.a>
                   )}
                 </div>
               </div>
