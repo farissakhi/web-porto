@@ -12,6 +12,9 @@ export interface Project {
   githubUrl: string;
   demoUrl?: string;
   techStack: string[];
+  longDescription: string;
+  goal: string;
+  gallery: string[];
 }
 
 export const projects: Project[] = [
@@ -23,6 +26,9 @@ export const projects: Project[] = [
     category: "ai-ml",
     githubUrl: "https://github.com/RickWijaya/NLP_Project",
     techStack: ["Next.js", "TypeScript", "Python", "FastAPI", "ChromaDB"],
+    longDescription: "", // TODO: penjelasan lebih detail, minimal 3-5 kalimat
+    goal: "", // TODO: tujuan/masalah yang diselesaikan project ini
+    gallery: [], // TODO: array path gambar tambahan/screenshot
   },
   {
     title: "Food Prediction Nutrition",
@@ -32,6 +38,9 @@ export const projects: Project[] = [
     category: "ai-ml",
     githubUrl: "https://github.com/farissakhi/food_prediction_nutrition",
     techStack: ["Python"],
+    longDescription: "", // TODO: penjelasan lebih detail
+    goal: "", // TODO: tujuan/masalah yang diselesaikan
+    gallery: [],
   },
   {
     title: "Smart Parking System",
@@ -41,6 +50,9 @@ export const projects: Project[] = [
     category: "web",
     githubUrl: "https://github.com/farissakhi/smart-parking-system",
     techStack: ["HTML", "JavaScript"],
+    longDescription: "", // TODO: penjelasan lebih detail
+    goal: "", // TODO: tujuan/masalah yang diselesaikan
+    gallery: [],
   },
   {
     title: "Finance Manager",
@@ -50,6 +62,9 @@ export const projects: Project[] = [
     category: "mobile",
     githubUrl: "https://github.com/farissakhi/finance_manager",
     techStack: ["Java"],
+    longDescription: "", // TODO: penjelasan lebih detail
+    goal: "", // TODO: tujuan/masalah yang diselesaikan
+    gallery: [],
   },
   {
     title: "Keshir",
@@ -59,6 +74,9 @@ export const projects: Project[] = [
     category: "web", // TODO: tentukan kategori yang tepat (web/ai-ml/mobile)
     githubUrl: "https://github.com/KuroBapak/Keshir",
     techStack: ["TBD"], // TODO: isi tech stack
+    longDescription: "", // TODO: penjelasan lebih detail
+    goal: "", // TODO: tujuan/masalah yang diselesaikan
+    gallery: [],
   },
 ];
 

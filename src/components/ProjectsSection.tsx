@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
-import { projects, projectCategories, type ProjectCategory } from "@/data/projects";
+import { projects, projectCategories, type ProjectCategory, type Project } from "@/data/projects";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
+import ProjectModal from "./ProjectModal";
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.92, y: 20 },
@@ -32,6 +33,7 @@ export default function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<"all" | ProjectCategory>(
     "all"
   );
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects =
     activeFilter === "all"
@@ -93,8 +95,10 @@ export default function ProjectsSection() {
               initial="hidden"
               animate="visible"
               exit="exit"
+              onClick={() => setSelectedProject(project)}
               className="group relative rounded-2xl bg-card border border-border overflow-hidden
-                         hover:border-muted-foreground/20 hover:shadow-[0_4px_24px_rgba(255,255,255,0.03)] transition-all duration-300"
+                         hover:border-muted-foreground/20 hover:shadow-[0_4px_24px_rgba(255,255,255,0.03)]
+                         transition-all duration-300 cursor-pointer"
             >
               {/* Project Thumbnail with zoom on hover */}
               <div className="relative aspect-video overflow-hidden bg-muted">
@@ -113,13 +117,14 @@ export default function ProjectsSection() {
                   </div>
                 </motion.div>
 
-                {/* Hover overlay */}
+                {/* Hover overlay with quick-links */}
                 <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100
                                 transition-opacity duration-300 flex items-center justify-center gap-3">
                   <motion.a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
@@ -133,6 +138,7 @@ export default function ProjectsSection() {
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
@@ -174,6 +180,7 @@ export default function ProjectsSection() {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground
                              hover:text-foreground transition-colors duration-300"
                 >
@@ -185,6 +192,7 @@ export default function ProjectsSection() {
                     href={project.demoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground
                                hover:text-foreground transition-colors duration-300"
                   >
@@ -197,6 +205,12 @@ export default function ProjectsSection() {
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {/* Project Detail Modal */}
+      <ProjectModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </SectionWrapper>
   );
 }

@@ -10,6 +10,15 @@ export const profile = {
   description:
     "Passionate developer crafting elegant digital solutions. I specialize in building modern web applications with clean code and exceptional user experiences.",
 
+  // --- About Section ---
+  aboutText:
+    "", // TODO: isi cerita lengkap tentang diri kamu, latar belakang, dan apa yang membuatmu tertarik di bidang development/AI-ML (2-4 kalimat)
+  aboutStats: [
+    { label: "Projects", value: "" }, // TODO: contoh "5+"
+    { label: "Tech Stack", value: "" }, // TODO: contoh "15+"
+    { label: "Tahun Belajar", value: "" }, // TODO: contoh "3+"
+  ],
+
   // --- Contact ---
   email: "farissakhii@gmail.com",
 
@@ -30,6 +39,7 @@ export const profile = {
   // --- Navigation ---
   navLinks: [
     { label: "Home", href: "#home" },
+    { label: "About", href: "#about" },
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
     { label: "Experience", href: "#experience" },

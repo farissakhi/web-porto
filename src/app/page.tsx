@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ScrollProgress from "@/components/ScrollProgress";
 import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
 import SkillsSection from "@/components/SkillsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ExperienceSection from "@/components/ExperienceSection";
@@ -21,6 +22,7 @@ export default function Home() {
       <main>
         <HeroSection />
         <div className="section-divider" />
+        <AboutSection />
         <SkillsSection />
         <ProjectsSection />
         <ExperienceSection />
