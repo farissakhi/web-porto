@@ -74,7 +74,7 @@ const dotVariant = {
 };
 
 /* ── helper components ── */
-function LogoBox({ logo, name }: { logo: string; name: string }) {
+function LogoBox({ logo, name, styleClass = "" }: { logo: string; name: string; styleClass?: string }) {
   const initials = getInitials(name);
   const colorClass = getAvatarColor(name);
 
@@ -87,7 +87,7 @@ function LogoBox({ logo, name }: { logo: string; name: string }) {
           width={128}
           height={128}
           quality={100}
-          className="w-full h-full object-cover bg-white scale-[1.5]"
+          className={`w-full h-full object-cover bg-white ${styleClass}`}
         />
       ) : (
         <div
@@ -262,6 +262,7 @@ function RoleDetails({
 /* ── single timeline entry (Education) ── */
 function TimelineEntry({
   logo,
+  logoStyle,
   title,
   subtitle,
   dateRange,
@@ -272,6 +273,7 @@ function TimelineEntry({
   isActive,
 }: {
   logo: string;
+  logoStyle?: string;
   title: string;
   subtitle: string;
   dateRange: string;
@@ -290,7 +292,7 @@ function TimelineEntry({
 
       <div className="flex-1 pb-10">
         <div className="group flex flex-col sm:flex-row sm:items-start gap-4 p-5 rounded-2xl bg-card border border-border hover:border-muted-foreground/20 transition-all duration-300">
-          <LogoBox logo={logo} name={subtitle} />
+          <LogoBox logo={logo} name={subtitle} styleClass={logoStyle} />
           <RoleDetails
             title={title}
             subtitle={subtitle}
@@ -313,7 +315,7 @@ function GroupedTimelineEntry({ org }: { org: Organization }) {
       <div className="rounded-2xl bg-card border border-border hover:border-muted-foreground/20 transition-all duration-300 overflow-hidden">
         {/* Organization Header */}
         <div className="flex items-center gap-4 p-5 sm:p-6 pb-0 sm:pb-0">
-          <LogoBox logo={org.logo} name={org.name} />
+          <LogoBox logo={org.logo} name={org.name} styleClass={org.logoStyle} />
           <div>
             <h3 className="text-base sm:text-lg font-bold text-foreground leading-tight">
               {org.name}
@@ -427,6 +429,7 @@ export default function ExperienceSection() {
                   <TimelineEntry
                     key={edu.id}
                     logo={edu.logo}
+                    logoStyle={edu.logoStyle}
                     title={edu.degree || "Degree"}
                     subtitle={edu.institution || "Institution"}
                     dateRange={dateRange}

@@ -6,6 +6,7 @@ export interface Education {
   id: string;
   institution: string;
   logo: string; // path logo kampus, taruh di /public/logos/
+  logoStyle?: string;
   degree: string;
   startDate: string;
   endDate: string; // atau "Present"
@@ -26,6 +27,7 @@ export interface Organization {
   id: string;
   name: string;
   logo: string; // path logo organisasi, taruh di /public/logos/
+  logoStyle?: string;
   roles: OrgRole[];
 }
 
@@ -34,7 +36,7 @@ export const education: Education[] = [
   {
     id: "edu-1",
     institution: "President University",
-    logo: "/logos/president-university.png", // Pastikan gambar barumu di-rename jadi ini dan ditaruh di folder public/logos
+    logo: "/logos/presu.jpg", // Pastikan gambar barumu di-rename jadi ini dan ditaruh di folder public/logos
     degree: "Informatics (Artificial Intelligence Focus)",
     startDate: "2024",
     endDate: "Present",
@@ -51,8 +53,9 @@ export const education: Education[] = [
 export const organizations: Organization[] = [
   {
     id: "org-1",
-    name: "PUFA COMPUTER SCIENCE (BEM)",
+    name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
     logo: "/logos/pufa.jpg",
+    logoStyle: "scale-[1.5]",
     roles: [
       {
         role: "Vice Chairperson",
