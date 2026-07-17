@@ -52,7 +52,7 @@ export const organizations: Organization[] = [
   {
     id: "org-1",
     name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
-    logo: "",
+    logo: "/logos/pufa.png",
     roles: [
       {
         role: "Vice Chairperson",
