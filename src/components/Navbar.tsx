@@ -232,7 +232,6 @@ export default function Navbar() {
 
                 <motion.a
                   href={profile.cvFile}
-                  download="CV-Muhammad-Faris-Sakhi-Ashari.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, x: 20 }}

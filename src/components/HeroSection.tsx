@@ -189,7 +189,6 @@ export default function HeroSection() {
             >
               <motion.a
                 href={profile.cvFile}
-                download="CV-Muhammad-Faris-Sakhi-Ashari.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
