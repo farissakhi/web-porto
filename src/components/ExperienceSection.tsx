@@ -86,7 +86,7 @@ function LogoBox({ logo, name }: { logo: string; name: string }) {
           alt={name}
           width={48}
           height={48}
-          className="w-full h-full object-cover bg-white"
+          className="w-full h-full object-cover bg-white scale-[1.5]"
         />
       ) : (
         <div
