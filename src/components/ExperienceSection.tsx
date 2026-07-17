@@ -84,9 +84,9 @@ function LogoBox({ logo, name }: { logo: string; name: string }) {
         <Image
           src={logo}
           alt={name}
-          width={40}
-          height={40}
-          className="w-8 h-8 object-contain"
+          width={48}
+          height={48}
+          className="w-full h-full object-cover bg-white"
         />
       ) : (
         <div
