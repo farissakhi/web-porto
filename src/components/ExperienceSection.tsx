@@ -84,8 +84,9 @@ function LogoBox({ logo, name }: { logo: string; name: string }) {
         <Image
           src={logo}
           alt={name}
-          width={48}
-          height={48}
+          width={128}
+          height={128}
+          quality={100}
           className="w-full h-full object-cover bg-white scale-[1.5]"
         />
       ) : (
