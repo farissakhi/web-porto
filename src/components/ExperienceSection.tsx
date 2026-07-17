@@ -87,7 +87,7 @@ function LogoBox({ logo, name, styleClass = "" }: { logo: string; name: string; 
           width={128}
           height={128}
           quality={100}
-          className={`w-full h-full object-cover bg-white ${styleClass}`}
+          className={`w-full h-full object-contain p-1 bg-white ${styleClass}`}
         />
       ) : (
         <div
@@ -430,8 +430,8 @@ export default function ExperienceSection() {
                     key={edu.id}
                     logo={edu.logo}
                     logoStyle={edu.logoStyle}
-                    title={edu.degree || "Degree"}
-                    subtitle={edu.institution || "Institution"}
+                    title={edu.institution || "Institution"}
+                    subtitle={edu.degree || "Degree"}
                     dateRange={dateRange}
                     gpa={edu.gpa}
                     description={edu.description}
