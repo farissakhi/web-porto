@@ -14,15 +14,19 @@ export interface Education {
   achievements: string[];
 }
 
-export interface Organization {
-  id: string;
-  name: string;
-  logo: string; // path logo organisasi, taruh di /public/logos/
+export interface OrgRole {
   role: string;
   startDate: string;
   endDate: string;
   description: string;
   achievements: string[];
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  logo: string; // path logo organisasi, taruh di /public/logos/
+  roles: OrgRole[];
 }
 
 // Academic / Education
@@ -49,24 +53,21 @@ export const organizations: Organization[] = [
     id: "org-1",
     name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
     logo: "",
-    role: "Vice Chairperson",
-    startDate: "Jan 2024", // TODO: Sesuaikan tanggal
-    endDate: "Present",
-    description: "Assisting the Chairperson in leading the organization and managing internal and external affairs...", // TODO: Sesuaikan deskripsi
-    achievements: [
-      // TODO: Isi pencapaian
-    ],
-  },
-  {
-    id: "org-2",
-    name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
-    logo: "",
-    role: "Member of Student Welfare Advocacy",
-    startDate: "Jan 2023", // TODO: Sesuaikan tanggal
-    endDate: "Dec 2023",
-    description: "Advocating for student rights and welfare, mediating between students and the faculty...", // TODO: Sesuaikan deskripsi
-    achievements: [
-      // TODO: Isi pencapaian
+    roles: [
+      {
+        role: "Vice Chairperson",
+        startDate: "Jan 2024", // TODO: Sesuaikan tanggal
+        endDate: "Present",
+        description: "Assisting the Chairperson in leading the organization and managing internal and external affairs...", // TODO: Sesuaikan deskripsi
+        achievements: [],
+      },
+      {
+        role: "Member of Student Welfare Advocacy",
+        startDate: "Jan 2023", // TODO: Sesuaikan tanggal
+        endDate: "Dec 2023",
+        description: "Advocating for student rights and welfare, mediating between students and the faculty...", // TODO: Sesuaikan deskripsi
+        achievements: [],
+      },
     ],
   },
 ];
