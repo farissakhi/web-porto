@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSend, FiMail, FiMapPin, FiCheck } from "react-icons/fi";
+import { FiSend, FiMail, FiMapPin, FiPhone, FiCheck } from "react-icons/fi";
 import SocialIcons from "./SocialIcons";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
 import { profile } from "@/data/profile";
@@ -95,6 +95,25 @@ export default function ContactSection() {
                 <p className="text-[11px] text-muted-foreground mb-0.5">Email</p>
                 <p className="text-sm font-medium group-hover:text-foreground transition-colors">
                   {profile.email}
+                </p>
+              </div>
+            </motion.a>
+
+            <motion.a
+              variants={contactInfoItem}
+              href={`tel:${profile.phone.replace(/[^+\d]/g, "")}`}
+              whileHover={{ scale: 1.02, y: -2 }}
+              transition={{ duration: 0.2 }}
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-card border border-border
+                         hover:border-muted-foreground/25 transition-all duration-300"
+            >
+              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-muted">
+                <FiPhone size={18} className="text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-[11px] text-muted-foreground mb-0.5">Phone</p>
+                <p className="text-sm font-medium group-hover:text-foreground transition-colors">
+                  {profile.phone}
                 </p>
               </div>
             </motion.a>

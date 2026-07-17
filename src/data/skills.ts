@@ -14,46 +14,61 @@ export interface SkillCategory {
 
 export const skillCategories: SkillCategory[] = [
   {
-    category: "Frontend",
+    category: "Programming Languages",
     skills: [
-      { name: "React", icon: "SiReact" },
-      { name: "Next.js", icon: "SiNextdotjs" },
-      { name: "TypeScript", icon: "SiTypescript" },
-      { name: "Tailwind CSS", icon: "SiTailwindcss" },
-      { name: "JavaScript", icon: "SiJavascript" },
-      { name: "HTML5", icon: "SiHtml5" },
-      { name: "CSS3", icon: "SiCss3" },
-    ],
-  },
-  {
-    category: "Backend",
-    skills: [
-      { name: "Node.js", icon: "SiNodedotjs" },
       { name: "Python", icon: "SiPython" },
-      { name: "Express", icon: "SiExpress" },
+      { name: "Java", icon: "SiOpenjdk" },
+      { name: "PHP", icon: "SiPhp" },
+      { name: "C++", icon: "SiCplusplus" },
+      { name: "SQL", icon: "SiCoder" },
+    ],
+  },
+  {
+    category: "AI & Machine Learning",
+    skills: [
+      { name: "Scikit-learn", icon: "SiScikitlearn" },
+      { name: "TensorFlow", icon: "SiTensorflow" },
+      { name: "Keras", icon: "SiKeras" },
+      { name: "OpenCV", icon: "SiOpencv" },
+    ],
+  },
+  {
+    category: "AI System Development",
+    skills: [
+      { name: "LangChain", icon: "SiLangchain" },
+      { name: "Hugging Face", icon: "SiHuggingface" },
+      { name: "ChromaDB", icon: "SiCoder" },
+    ],
+  },
+  {
+    category: "Data Science & Analytics",
+    skills: [
+      { name: "Pandas", icon: "SiPandas" },
+      { name: "NumPy", icon: "SiNumpy" },
+      { name: "Matplotlib", icon: "SiCoder" },
+    ],
+  },
+  {
+    category: "Web & Software Development",
+    skills: [
       { name: "Laravel", icon: "SiLaravel" },
-      { name: "FastAPI", icon: "SiFastapi" },
-    ],
-  },
-  {
-    category: "Database",
-    skills: [
-      { name: "PostgreSQL", icon: "SiPostgresql" },
-      { name: "MongoDB", icon: "SiMongodb" },
+      { name: "JavaScript", icon: "SiJavascript" },
       { name: "MySQL", icon: "SiMysql" },
-      { name: "Appwrite", icon: "SiAppwrite" },
-      { name: "Firebase", icon: "SiFirebase" },
+      { name: "Flask", icon: "SiFlask" },
+      { name: "Streamlit", icon: "SiStreamlit" },
+      { name: "Git", icon: "SiGit" },
+      { name: "GitHub", icon: "SiGithub" },
     ],
   },
   {
-    category: "Tools & DevOps",
+    category: "Tools & Platforms",
     skills: [
-      { name: "Git", icon: "SiGit" },
-      { name: "Docker", icon: "SiDocker" },
-      { name: "Vercel", icon: "SiVercel" },
-      { name: "VS Code", icon: "SiVisualstudiocode" },
+      { name: "Jupyter Notebook", icon: "SiJupyter" },
+      { name: "Google Colab", icon: "SiGooglecolab" },
+      { name: "VS Code", icon: "SiCoder" },
       { name: "Figma", icon: "SiFigma" },
-      { name: "Linux", icon: "SiLinux" },
+      { name: "Android Studio", icon: "SiAndroidstudio" },
+      { name: "Cisco Packet Tracer", icon: "SiCisco" },
     ],
   },
 ];

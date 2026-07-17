@@ -37,11 +37,11 @@ export const education: Education[] = [
     id: "edu-1",
     institution: "President University",
     logo: "/logos/presu.jpg", // Pastikan gambar barumu di-rename jadi ini dan ditaruh di folder public/logos
-    degree: "Informatics (Artificial Intelligence Focus)",
-    startDate: "2024",
+    degree: "Bachelor of Informatics - Artificial Intelligence",
+    startDate: "09/2024",
     endDate: "Present",
-    gpa: "", // TODO: isi GPA kalau mau ditampilkan
-    description: "Pursuing a degree in Informatics with a specialization in Artificial Intelligence. Focused on developing scalable machine learning models and intelligent applications.",
+    gpa: "3.69/4.00",
+    description: "Pursuing a degree in Informatics with a specialization in Artificial Intelligence. Related courses: Artificial Intelligence, Machine Learning, Deep Learning, Natural Language Processing (NLP), Computer Vision, Database Systems, Software Engineering, Web Programming, and Data Structures & Algorithms.",
     achievements: [
       "Built a Multi-Tenant RAG Chatbot using FastAPI, ChromaDB, and various LLM models (Groq, TinyLlama, Qwen2)",
       "Developed a Machine Learning-based Food Nutrition Prediction application",

@@ -189,7 +189,9 @@ export default function HeroSection() {
             >
               <motion.a
                 href={profile.cvFile}
-                download
+                download="CV-Muhammad-Faris-Sakhi-Ashari.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
@@ -201,7 +203,7 @@ export default function HeroSection() {
                   size={16}
                   className="group-hover:animate-bounce"
                 />
-                Download CV
+                Get My CV
               </motion.a>
 
               <motion.a

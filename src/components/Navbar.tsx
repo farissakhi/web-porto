@@ -119,20 +119,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right side: Resume + Theme toggle + Hire Me */}
+          {/* Right side: Theme toggle + Hire Me */}
           <div className="hidden md:flex items-center gap-2">
-            <motion.a
-              href={profile.cvFile}
-              download
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-1 px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground
-                         rounded-full border border-border hover:border-muted-foreground/40 transition-all duration-300"
-            >
-              <FiDownload size={12} />
-              Resume
-            </motion.a>
-
             <motion.button
               onClick={toggleTheme}
               aria-label="Toggle theme"
@@ -244,14 +232,16 @@ export default function Navbar() {
 
                 <motion.a
                   href={profile.cvFile}
-                  download
+                  download="CV-Muhammad-Faris-Sakhi-Ashari.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.35 }}
                   className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm text-muted-foreground hover:text-foreground transition-all"
                 >
                   <FiDownload size={14} />
-                  Download Resume
+                  Get My CV
                 </motion.a>
 
                 <motion.a

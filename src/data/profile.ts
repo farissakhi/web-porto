@@ -8,23 +8,24 @@ export const profile = {
   fullName: "Muhammad Faris Sakhi Ashari",
   role: "Full Stack Developer",
   description:
-    "Passionate developer crafting elegant digital solutions. I specialize in building modern web applications with clean code and exceptional user experiences.",
+    "Informatics student specializing in Artificial Intelligence, passionate about building AI-driven solutions and software applications across Computer Vision, NLP, and web development.",
 
   // --- About Section ---
   aboutText:
-    "", // TODO: isi cerita lengkap tentang diri kamu, latar belakang, dan apa yang membuatmu tertarik di bidang development/AI-ML (2-4 kalimat)
+    "Informatics student at President University with a concentration in Artificial Intelligence, passionate about developing AI-driven solutions and software applications. Experienced in building web-based and database-driven systems using PHP, MySQL, and Laravel, with project experience in Computer Vision, NLP, and AI-powered applications. Proficient in Python, JavaScript, SQL, and modern development tools such as Git/GitHub and Figma. Quick to adapt to new technologies, strong in problem-solving, and eager to contribute to innovative AI and software engineering projects in a professional environment.",
   aboutStats: [
-    { label: "Projects", value: "" }, // TODO: contoh "5+"
-    { label: "Tech Stack", value: "" }, // TODO: contoh "15+"
-    { label: "Tahun Belajar", value: "" }, // TODO: contoh "3+"
+    { label: "Projects", value: "5+" },
+    { label: "Tech Stack", value: "25+" },
+    { label: "2+ years studying", value: "2+" },
   ],
 
   // --- Contact ---
   email: "farissakhii@gmail.com",
+  phone: "+62 812-7827-0535",
 
   // --- Assets ---
   profileImage: "/images/profile.jpg", // TODO: ganti dengan foto asli
-  cvFile: "/cv-faris-sakhi.pdf", // TODO: ganti dengan file CV asli di public/
+  cvFile: "/cv-faris-sakhi.pdf",
 
   // --- Social Links ---
   socials: {
@@ -34,7 +35,7 @@ export const profile = {
   },
 
   // --- Location ---
-  location: "Indonesia", // TODO: ganti lokasi spesifik jika mau
+  location: "Jakarta, Indonesia",
 
   // --- Navigation ---
   navLinks: [
