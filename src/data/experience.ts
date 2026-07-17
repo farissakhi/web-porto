@@ -47,7 +47,7 @@ export const education: Education[] = [
 export const organizations: Organization[] = [
   {
     id: "org-1",
-    name: "Organisasi Mahasiswa (Contoh)", // TODO: Isi nama organisasinya
+    name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
     logo: "",
     role: "Vice Chairperson",
     startDate: "Jan 2024", // TODO: Sesuaikan tanggal
@@ -59,7 +59,7 @@ export const organizations: Organization[] = [
   },
   {
     id: "org-2",
-    name: "Organisasi Mahasiswa (Contoh)", // TODO: Isi nama organisasinya
+    name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
     logo: "",
     role: "Member of Student Welfare Advocacy",
     startDate: "Jan 2023", // TODO: Sesuaikan tanggal
