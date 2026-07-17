@@ -33,16 +33,16 @@ export interface Organization {
 export const education: Education[] = [
   {
     id: "edu-1",
-    institution: "", // TODO: nama kampus
-    logo: "", // TODO: path logo kampus, contoh "/logos/university.png"
-    degree: "", // TODO: contoh "S1 Teknik Informatika"
-    startDate: "", // TODO: contoh "Sep 2022"
-    endDate: "", // TODO: contoh "Present" atau "Jun 2026"
-    gpa: "", // TODO: contoh "3.75 / 4.00"
-    description: "", // TODO: ringkasan singkat, fokus studi / minat akademik
+    institution: "President University",
+    logo: "/logos/president-university.png", // Pastikan gambar barumu di-rename jadi ini dan ditaruh di folder public/logos
+    degree: "Informatics (Artificial Intelligence Focus)",
+    startDate: "2024",
+    endDate: "Present",
+    gpa: "", // TODO: isi GPA kalau mau ditampilkan
+    description: "Pursuing a degree in Informatics with a specialization in Artificial Intelligence. Focused on developing scalable machine learning models and intelligent applications.",
     achievements: [
-      // TODO: contoh "Dean's List Semester 3"
-      // TODO: contoh "Anggota tim riset X"
+      "Built a Multi-Tenant RAG Chatbot using FastAPI, ChromaDB, and various LLM models (Groq, TinyLlama, Qwen2)",
+      "Developed a Machine Learning-based Food Nutrition Prediction application",
     ],
   },
 ];
@@ -51,8 +51,8 @@ export const education: Education[] = [
 export const organizations: Organization[] = [
   {
     id: "org-1",
-    name: "PUFA COMPUTER SCIENCE (BEM FAKULTAS)",
-    logo: "/logos/pufa.png",
+    name: "PUFA COMPUTER SCIENCE (BEM)",
+    logo: "/logos/pufa.jpg",
     roles: [
       {
         role: "Vice Chairperson",
