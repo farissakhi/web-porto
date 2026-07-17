@@ -1,0 +1,168 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiGithub, FiExternalLink } from "react-icons/fi";
+import { projects, projectCategories, type ProjectCategory } from "@/data/projects";
+import SectionWrapper, { SectionHeading } from "./SectionWrapper";
+
+export default function ProjectsSection() {
+  const [activeFilter, setActiveFilter] = useState<"all" | ProjectCategory>(
+    "all"
+  );
+
+  const filteredProjects =
+    activeFilter === "all"
+      ? projects
+      : projects.filter((p) => p.category === activeFilter);
+
+  return (
+    <SectionWrapper id="projects">
+      <SectionHeading
+        title="Projects"
+        subtitle="A selection of projects I've built and contributed to"
+      />
+
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+        {projectCategories.map((cat) => (
+          <button
+            key={cat.value}
+            onClick={() =>
+              setActiveFilter(cat.value as "all" | ProjectCategory)
+            }
+            className={`relative px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-300
+              ${
+                activeFilter === cat.value
+                  ? "text-background"
+                  : "text-muted-foreground hover:text-foreground border border-border hover:border-muted-foreground/30"
+              }`}
+          >
+            {activeFilter === cat.value && (
+              <motion.div
+                layoutId="activeFilter"
+                className="absolute inset-0 bg-foreground rounded-full -z-10"
+                transition={{
+                  type: "spring",
+                  stiffness: 380,
+                  damping: 30,
+                }}
+              />
+            )}
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Projects Grid */}
+      <motion.div
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project) => (
+            <motion.div
+              key={project.title}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              className="group relative rounded-2xl bg-card border border-border overflow-hidden
+                         hover:border-muted-foreground/20 transition-all duration-300"
+            >
+              {/* Project Thumbnail */}
+              <div className="relative aspect-video overflow-hidden bg-muted">
+                {/* TODO: Ganti dengan gambar project asli */}
+                <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
+                  <span className="text-xl font-bold text-muted-foreground/30">
+                    {project.title
+                      .split(" ")
+                      .map((w) => w[0])
+                      .join("")}
+                  </span>
+                </div>
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100
+                                transition-opacity duration-300 flex items-center justify-center gap-3">
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
+                               hover:bg-white/20 transition-all duration-200 text-white"
+                    aria-label={`GitHub repo for ${project.title}`}
+                  >
+                    <FiGithub size={18} />
+                  </a>
+                  {project.demoUrl && (
+                    <a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
+                                 hover:bg-white/20 transition-all duration-200 text-white"
+                      aria-label={`Live demo for ${project.title}`}
+                    >
+                      <FiExternalLink size={18} />
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Card Content */}
+              <div className="p-5">
+                <h3 className="text-base font-semibold mb-2 group-hover:text-foreground transition-colors duration-300">
+                  {project.title}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed mb-4 line-clamp-2">
+                  {project.description}
+                </p>
+
+                {/* Tech Stack Badges */}
+                <div className="flex flex-wrap gap-1.5">
+                  {project.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-muted text-muted-foreground
+                                 border border-border"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom links */}
+              <div className="px-5 pb-4 flex items-center gap-3">
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground
+                             hover:text-foreground transition-colors duration-300"
+                >
+                  <FiGithub size={13} />
+                  Source Code
+                </a>
+                {project.demoUrl && (
+                  <a
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground
+                               hover:text-foreground transition-colors duration-300"
+                  >
+                    <FiExternalLink size={13} />
+                    Live Demo
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+    </SectionWrapper>
+  );
+}

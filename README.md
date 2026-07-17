@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Portfolio Website
 
-## Getting Started
+A modern, responsive, and interactive personal portfolio website built to showcase my projects, skills, and experience as a Full Stack Developer. Designed with an emphasis on a premium, clean aesthetic to attract internship opportunities.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Modern Tech Stack**: Built with Next.js (App Router), TypeScript, and Tailwind CSS.
+- **Smooth Animations**: Interactive UI and page transitions powered by Framer Motion.
+- **Responsive Design**: Fully responsive layout that looks great on mobile, tablet, and desktop.
+- **Dynamic Content**: Easy to update profile information and projects via dedicated data files.
+- **Premium UI**: Deep, elegant theme with glowing accents and glassmorphism elements.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Next.js](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - Static typing
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [React Icons](https://react-icons.github.io/react-icons/) - Iconography
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💻 Getting Started
 
-## Learn More
+### Prerequisites
+- Node.js 18.17 or later
+- npm, yarn, pnpm, or bun
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/farissakhi/web-porto.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd web-porto
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+You can easily modify the content of this portfolio without changing the UI components by editing the files in `src/data/`:
+- `src/data/profile.ts`: Edit personal information, social links, role, and CV.
+- `src/data/projects.ts`: Add, remove, or modify portfolio projects.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 👨‍💻 Author
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Muhammad Faris Sakhi Ashari**
+- GitHub: [@farissakhi](https://github.com/farissakhi)
+- LinkedIn: [Faris Sakhi](https://www.linkedin.com/in/farissakhi)
+- Instagram: [@farissakhi_](https://instagram.com/farissakhi_)
