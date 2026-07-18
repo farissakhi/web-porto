@@ -12,6 +12,7 @@ import { FoodNutritionIllustration } from "@/components/illustrations/FoodNutrit
 import { SmartParkingIllustration } from "@/components/illustrations/SmartParkingIllustration";
 import { FinanceManagerIllustration } from "@/components/illustrations/FinanceManagerIllustration";
 import { KeshirIllustration } from "@/components/illustrations/KeshirIllustration";
+import { SmartAiEditorIllustration } from "@/components/illustrations/SmartAiEditorIllustration";
 
 const illustrationMap: Record<string, React.ComponentType> = {
   "rag-chatbot": RagChatbotIllustration,
@@ -19,6 +20,7 @@ const illustrationMap: Record<string, React.ComponentType> = {
   "smart-parking": SmartParkingIllustration,
   "finance-manager": FinanceManagerIllustration,
   "keshir": KeshirIllustration,
+  "smart-ai-editor": SmartAiEditorIllustration,
 };
 
 
@@ -126,11 +128,11 @@ export default function ProjectsSection() {
                   className="relative w-full h-full"
                 >
                   {project.illustration && illustrationMap[project.illustration] ? (
-                    // Render custom SVG illustration
+                    // Render custom SVG illustration — fills card exactly like a screenshot
                     (() => {
                       const Illustration = illustrationMap[project.illustration!];
                       return (
-                        <div className="w-full h-full">
+                        <div className="absolute inset-0 w-full h-full">
                           <Illustration />
                         </div>
                       );

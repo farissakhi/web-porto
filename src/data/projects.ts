@@ -53,15 +53,22 @@ export const projects: Project[] = [
       "Melatih dan mengintegrasikan model Convolutional Neural Network (CNN), termasuk ResNet50V2 dan EfficientNetB0, menggunakan TensorFlow dan Keras untuk pengenalan visual makanan dengan akurasi tinggi di berbagai kondisi gambar. Membangun pipeline inferensi end-to-end yang menggabungkan image preprocessing, tensor manipulation, dan prediction engine untuk hasil klasifikasi makanan sub-detik. Dilengkapi sistem rekomendasi diet cerdas menggunakan Pandas dan fuzzy string matching untuk memetakan label makanan ke database nutrisi kustom.",
     goal:
       "Membantu pengguna melacak asupan nutrisi harian secara otomatis hanya dari foto makanan, tanpa perlu input manual.",
-    gallery: [],
+    gallery: [
+      "/projects/food-nutrition/screenshot-1.png",
+      "/projects/food-nutrition/screenshot-2.png",
+      "/projects/food-nutrition/screenshot-3.png",
+      "/projects/food-nutrition/screenshot-4.png",
+      "/projects/food-nutrition/screenshot-5.png",
+    ],
   },
   {
     title: "Smart AI Image Editor",
     description:
       "Aplikasi web pengolahan gambar interaktif dengan fitur AI, mendukung manipulasi gambar real-time, undo/redo, dan operasi file.",
     image: "/projects/smart-ai-editor/screenshot-1.png",
+    illustration: "smart-ai-editor",
     category: "ai-ml",
-    githubUrl: "", // TODO: isi link repo GitHub project ini
+    githubUrl: "",
     techStack: ["Python", "OpenCV", "Flask", "NumPy", "Deep Learning (DNN)"],
     longDescription:
       "Mengimplementasikan algoritma computer vision inti menggunakan OpenCV dan NumPy, meliputi spatial filtering (Gaussian, Median, Sobel, Laplacian), histogram equalization, dan transformasi geometris. Mengintegrasikan fitur AI lanjutan memanfaatkan modul Deep Neural Network (DNN) dari OpenCV untuk Neural Style Transfer, serta library rembg untuk penghapusan background otomatis dengan presisi tinggi. Merancang pipeline koreksi warna otomatis menggunakan algoritma Gray World untuk menyeimbangkan warna gambar dan memperbaiki inkonsistensi pencahayaan.",
