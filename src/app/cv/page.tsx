@@ -39,8 +39,9 @@ export default function CVPage() {
         </div>
 
         <a
-          href={profile.cvFile}
-          download="CV-Faris-Sakhi.pdf"
+          href={profile.cvDriveDownload}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold
                      bg-emerald-500 text-white hover:bg-emerald-400
                      transition-colors duration-200"
@@ -63,13 +64,14 @@ export default function CVPage() {
         </a>
       </div>
 
-      {/* PDF Viewer — served via API route so IDM doesn't intercept */}
+      {/* PDF Viewer — Google Drive embed, IDM tidak intercept */}
       <div className="flex-1 min-h-0">
         <iframe
-          src="/api/cv"
+          src={profile.cvDrivePreview}
           title={`CV — ${profile.name}`}
           className="w-full h-full border-none"
           loading="eager"
+          allow="autoplay"
         />
       </div>
     </main>

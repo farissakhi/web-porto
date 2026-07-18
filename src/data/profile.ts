@@ -26,6 +26,10 @@ export const profile = {
   // --- Assets ---
   profileImage: "/images/profile.jpg", // TODO: ganti dengan foto asli
   cvFile: "/cv-faris-sakhi.pdf",
+  /** Google Drive preview URL — opens in browser, IDM tidak intercept */
+  cvDrivePreview: "https://drive.google.com/file/d/19M4ReRlH2VWWEzUfCebqVGl0oricQ9lH/preview",
+  /** Google Drive direct download URL */
+  cvDriveDownload: "https://drive.google.com/uc?export=download&id=19M4ReRlH2VWWEzUfCebqVGl0oricQ9lH",
 
   // --- Social Links ---
   socials: {
