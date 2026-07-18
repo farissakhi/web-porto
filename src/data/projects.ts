@@ -25,10 +25,12 @@ export const projects: Project[] = [
     image: "/images/projects/nlp-project.jpg", // TODO: ganti gambar
     category: "ai-ml",
     githubUrl: "https://github.com/RickWijaya/NLP_Project",
-    techStack: ["Next.js", "TypeScript", "Python", "FastAPI", "ChromaDB"],
-    longDescription: "", // TODO: penjelasan lebih detail, minimal 3-5 kalimat
-    goal: "", // TODO: tujuan/masalah yang diselesaikan project ini
-    gallery: [], // TODO: array path gambar tambahan/screenshot
+    techStack: ["Next.js", "TypeScript", "FastAPI", "PostgreSQL", "ChromaDB", "Groq API"],
+    longDescription:
+      "Sistem ini dibangun dengan arsitektur multi-tenant penuh, di mana setiap organisasi punya tabel database dan vector collection sendiri sehingga data antar tenant tidak pernah tercampur. Proses retrieval menggabungkan pencarian vector similarity dengan BM25 re-ranking agar dokumen yang diambil lebih relevan, didukung sentence-aware chunking saat memproses upload PDF, DOCX, TXT, maupun XLSX. Lewat admin dashboard, model LLM yang dipakai bisa diganti-ganti (Groq, TinyLlama, Phi-2, atau Qwen2) beserta temperature dan system prompt-nya, sementara pengguna akhir bisa langsung chat lewat antarmuka publik tanpa perlu login.",
+    goal:
+      "Memungkinkan organisasi men-deploy chatbot yang menjawab pertanyaan spesifik berdasarkan dokumen internal mereka sendiri, sambil menjaga isolasi data tiap tenant tetap ketat dan aman.",
+    gallery: [],
   },
   {
     title: "Food Predictor & Nutrition Tracker",
@@ -61,14 +63,21 @@ export const projects: Project[] = [
   {
     title: "Smart Parking System",
     description:
-      "Sistem parkir pintar untuk memantau dan mengelola ketersediaan slot parkir.",
+      "Sistem parkir pintar berbasis computer vision dan IoT yang mengenali plat nomor kendaraan secara real-time untuk mengontrol palang otomatis dan memantau ketersediaan parkir.",
     image: "/images/projects/smart-parking.jpg", // TODO: ganti gambar
     category: "web",
     githubUrl: "https://github.com/farissakhi/smart-parking-system",
-    techStack: ["HTML", "JavaScript"],
-    longDescription: "", // TODO: penjelasan lebih detail
-    goal: "", // TODO: tujuan/masalah yang diselesaikan
-    gallery: [],
+    techStack: ["Python", "YOLOv8", "OpenCV", "Flask-SocketIO", "ESP32"],
+    longDescription:
+      "Menggunakan model YOLOv8 untuk mendeteksi kendaraan dan plat nomornya secara real-time dari feed kamera, lalu membaca karakter plat dengan EasyOCR sebelum divalidasi ke database kendaraan terdaftar. Seluruh inference berjalan sebagai edge AI di perangkat lokal (dipercepat ONNX Runtime) sehingga latensi tetap rendah tanpa bergantung ke cloud. Hasil deteksi terhubung ke mikrokontroler ESP32 yang mengendalikan palang parkir secara otomatis, sementara dashboard Flask-SocketIO menampilkan status kendaraan, log akses, dan diagnostik hardware secara real-time ke admin.",
+    goal:
+      "Mengotomatiskan identifikasi kendaraan dan buka-tutup palang parkir agar operasional lebih cepat dan minim campur tangan manual, sekaligus memberi admin visibilitas penuh lewat dashboard monitoring.",
+    gallery: [
+      "https://raw.githubusercontent.com/farissakhi/smart-parking-system/main/assets/dashboard.png",
+      "https://raw.githubusercontent.com/farissakhi/smart-parking-system/main/assets/vehicle-management.png",
+      "https://raw.githubusercontent.com/farissakhi/smart-parking-system/main/assets/license-plate-detection.png",
+      "https://raw.githubusercontent.com/farissakhi/smart-parking-system/main/assets/system-architecture.png",
+    ],
   },
   {
     title: "Finance Manager",
@@ -87,13 +96,15 @@ export const projects: Project[] = [
   {
     title: "Keshir",
     description:
-      "Coming soon.", // TODO: isi deskripsi project Keshir
+      "Sistem point-of-sale (POS) terintegrasi untuk coffee shop dan restoran, mencakup kasir, dapur, inventori, pemesanan pelanggan, hingga presensi staf dalam satu platform.",
     image: "/images/projects/keshir.jpg", // TODO: ganti gambar
-    category: "web", // TODO: tentukan kategori yang tepat (web/ai-ml/mobile)
+    category: "web",
     githubUrl: "https://github.com/KuroBapak/Keshir",
-    techStack: ["TBD"], // TODO: isi tech stack
-    longDescription: "", // TODO: penjelasan lebih detail
-    goal: "", // TODO: tujuan/masalah yang diselesaikan
+    techStack: ["Laravel", "PHP", "Tailwind CSS", "MySQL", "Midtrans"],
+    longDescription:
+      "Keshir menggabungkan seluruh operasional coffee shop dan restoran dalam satu sistem: kasir dengan manajemen shift dan cash drawer, kitchen display system untuk melacak status pesanan dapur, inventori berbasis FIFO yang otomatis memotong stok sesuai resep, sampai pemesanan mandiri pelanggan lewat QR code. Akses dibedakan berdasarkan role (Owner, Manager, Cashier, Kitchen Staff) dan dilengkapi gerbang presensi staf sebelum bisa masuk ke sistem, plus integrasi RFID lewat ESP32. Pembayaran terhubung ke Midtrans, dan tersedia chatbot AI lokal berbasis Ollama untuk membantu operasional sehari-hari.",
+    goal:
+      "Menyatukan seluruh proses bisnis coffee shop dan restoran — kasir, dapur, inventori, sampai presensi staf — dalam satu sistem terintegrasi agar operasional lebih rapi dan mudah dipantau.",
     gallery: [],
   },
 ];
