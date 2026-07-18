@@ -93,9 +93,18 @@ export default function HeroSection() {
             transition={{ duration: 0.7, ease: "easeOut" as const }}
             className="flex justify-center lg:justify-start order-1"
           >
-            <div className="relative">
-              {/* Glow ring */}
-              <div className="absolute -inset-4 bg-white/[0.03] rounded-full blur-2xl" />
+            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 shadow-2xl shadow-emerald-500/10 rounded-full">
+              {/* Outer glow circle */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400/20 to-cyan-500/20 blur-3xl" />
+              
+              {/* Subtle rotating ring */}
+              {!prefersReduced && (
+                <motion.div
+                  className="absolute -inset-2 rounded-full border border-emerald-400/30 border-t-emerald-400/60"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
+              )}
 
               {/* Floating wrapper */}
               <motion.div
@@ -109,20 +118,20 @@ export default function HeroSection() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
+                className="relative w-full h-full"
               >
                 {/* Border ring */}
-                <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full p-[2px] bg-gradient-to-b from-white/20 to-white/5">
-                  <div className="w-full h-full rounded-full bg-card overflow-hidden border border-border">
-                    <Image
-                      src={profile.profileImage}
-                      alt={profile.name}
-                      width={320}
-                      height={320}
-                      className="w-full h-full object-cover"
-                      priority
-                    />
-                  </div>
-                </div>
+                <div className="absolute inset-0 rounded-full border-[3px] border-slate-400/20 bg-gradient-to-br from-slate-800 to-slate-900" />
+                
+                {/* Foto */}
+                <Image
+                  src={profile.profileImage}
+                  alt={profile.name}
+                  fill
+                  sizes="(max-width: 640px) 256px, (max-width: 768px) 288px, 320px"
+                  className="rounded-full object-cover relative z-10 p-1.5"
+                  priority
+                />
               </motion.div>
             </div>
           </motion.div>
