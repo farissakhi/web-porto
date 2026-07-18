@@ -190,8 +190,9 @@ export default function HeroSection() {
               className="flex flex-wrap items-center gap-3 justify-center lg:justify-start mb-8"
             >
               <motion.a
-                href={profile.cvFile}
-                download="CV-Faris-Sakhi.pdf"
+                href="/cv"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
