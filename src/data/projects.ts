@@ -75,8 +75,8 @@ export const projects: Project[] = [
     goal:
       "Menyediakan editor gambar berbasis AI yang ringan dan berjalan di browser tanpa perlu software editing yang berat.",
     gallery: [
-      "/projects/smart-ai-editor/screenshot-1.png",
       "/projects/smart-ai-editor/screenshot-2.png",
+      "/projects/smart-ai-editor/screenshot-3.png",
     ],
   },
   {
