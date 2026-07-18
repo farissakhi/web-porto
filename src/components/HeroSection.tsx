@@ -40,7 +40,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden scroll-mt-32"
+      className="relative min-h-screen flex items-center overflow-hidden scroll-mt-16"
     >
       {/* Ambient gradient blobs — slow looping motion, very low opacity */}
       {!prefersReduced && (
