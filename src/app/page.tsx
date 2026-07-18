@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import MobileNav from "@/components/MobileNav";
 import ScrollProgress from "@/components/ScrollProgress";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -18,7 +19,10 @@ export default function Home() {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <ScrollProgress />
-      <Navbar />
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <MobileNav />
       <main>
         <HeroSection />
         <div className="section-divider" />
