@@ -63,10 +63,10 @@ export default function CVPage() {
         </a>
       </div>
 
-      {/* PDF Viewer — embed as iframe so IDM doesn't intercept */}
+      {/* PDF Viewer — served via API route so IDM doesn't intercept */}
       <div className="flex-1 min-h-0">
         <iframe
-          src={`${profile.cvFile}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
+          src="/api/cv"
           title={`CV — ${profile.name}`}
           className="w-full h-full border-none"
           loading="eager"
