@@ -40,7 +40,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-screen flex items-center overflow-hidden scroll-mt-24"
     >
       {/* Ambient gradient blobs — slow looping motion, very low opacity */}
       {!prefersReduced && (
@@ -150,7 +150,7 @@ export default function HeroSection() {
               className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4"
             >
               Hi, I&apos;m{" "}
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
                 {profile.name}
               </span>
             </motion.h1>
