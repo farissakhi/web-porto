@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import { projects, projectCategories, type ProjectCategory, type Project } from "@/data/projects";
@@ -108,16 +109,26 @@ export default function ProjectsSection() {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="w-full h-full"
+                  className="relative w-full h-full"
                 >
-                  <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
-                    <span className="text-xl font-bold text-muted-foreground/30">
-                      {project.title
-                        .split(" ")
-                        .map((w) => w[0])
-                        .join("")}
-                    </span>
-                  </div>
+                  {project.gallery.length > 0 ? (
+                    <Image
+                      src={project.gallery[0]}
+                      alt={`${project.title} screenshot`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
+                      <span className="text-xl font-bold text-muted-foreground/30">
+                        {project.title
+                          .split(" ")
+                          .map((w) => w[0])
+                          .join("")}
+                      </span>
+                    </div>
+                  )}
                 </motion.div>
 
                 {/* Hover overlay with quick-links */}
