@@ -17,7 +17,7 @@ export default function SectionWrapper({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-24 ${className}`}
+      className={`relative scroll-mt-32 ${className}`}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <motion.div
