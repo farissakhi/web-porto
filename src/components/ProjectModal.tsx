@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiX, FiGithub, FiExternalLink, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiX, FiGithub, FiExternalLink } from "react-icons/fi";
 import type { Project } from "@/data/projects";
+import ProjectGallery from "./ProjectGallery";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -11,16 +12,6 @@ interface ProjectModalProps {
 }
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
-  const allImages = project
-    ? [project.image, ...project.gallery].filter(Boolean)
-    : [];
-  const [currentImage, setCurrentImage] = useState(0);
-
-  // Reset image index when project changes
-  useEffect(() => {
-    setCurrentImage(0);
-  }, [project]);
-
   // Lock body scroll when modal is open
   useEffect(() => {
     if (project) {
@@ -45,11 +36,6 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
-
-  const nextImage = () =>
-    setCurrentImage((prev) => (prev + 1) % allImages.length);
-  const prevImage = () =>
-    setCurrentImage((prev) => (prev - 1 + allImages.length) % allImages.length);
 
   return (
     <AnimatePresence>
@@ -86,77 +72,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               <FiX size={16} />
             </button>
 
-            {/* Image / Gallery */}
-            {allImages.length > 0 ? (
-              <div className="relative aspect-video bg-muted overflow-hidden rounded-t-2xl">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentImage}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center"
-                  >
-                    <span className="text-3xl font-bold text-muted-foreground/20">
-                      {project.title
-                        .split(" ")
-                        .map((w) => w[0])
-                        .join("")}
-                    </span>
-                  </motion.div>
-                </AnimatePresence>
-
-                {/* Gallery navigation */}
-                {allImages.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevImage}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8
-                                 rounded-full bg-black/50 border border-white/10 text-white
-                                 hover:bg-black/70 transition-all duration-200"
-                      aria-label="Previous image"
-                    >
-                      <FiChevronLeft size={16} />
-                    </button>
-                    <button
-                      onClick={nextImage}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8
-                                 rounded-full bg-black/50 border border-white/10 text-white
-                                 hover:bg-black/70 transition-all duration-200"
-                      aria-label="Next image"
-                    >
-                      <FiChevronRight size={16} />
-                    </button>
-
-                    {/* Dots indicator */}
-                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
-                      {allImages.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentImage(idx)}
-                          className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
-                            idx === currentImage
-                              ? "bg-white w-4"
-                              : "bg-white/40 hover:bg-white/60"
-                          }`}
-                          aria-label={`Go to image ${idx + 1}`}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="aspect-video bg-muted rounded-t-2xl flex items-center justify-center">
-                <span className="text-3xl font-bold text-muted-foreground/20">
-                  {project.title
-                    .split(" ")
-                    .map((w) => w[0])
-                    .join("")}
-                </span>
-              </div>
-            )}
+            {/* Screenshot Gallery */}
+            <ProjectGallery gallery={project.gallery} title={project.title} />
 
             {/* Content */}
             <div className="p-6 sm:p-8 space-y-5">
