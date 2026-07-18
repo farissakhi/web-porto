@@ -1,12 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import { projects, projectCategories, type ProjectCategory, type Project } from "@/data/projects";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
 import ProjectModal from "./ProjectModal";
+import { RagChatbotIllustration } from "@/components/illustrations/RagChatbotIllustration";
+import { FoodNutritionIllustration } from "@/components/illustrations/FoodNutritionIllustration";
+import { SmartParkingIllustration } from "@/components/illustrations/SmartParkingIllustration";
+import { FinanceManagerIllustration } from "@/components/illustrations/FinanceManagerIllustration";
+import { KeshirIllustration } from "@/components/illustrations/KeshirIllustration";
+
+const illustrationMap: Record<string, React.ComponentType> = {
+  "rag-chatbot": RagChatbotIllustration,
+  "food-nutrition": FoodNutritionIllustration,
+  "smart-parking": SmartParkingIllustration,
+  "finance-manager": FinanceManagerIllustration,
+  "keshir": KeshirIllustration,
+};
+
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.92, y: 20 },
@@ -104,14 +118,24 @@ export default function ProjectsSection() {
                          hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
                          transition-[border-color,box-shadow] duration-300 cursor-pointer"
             >
-              {/* Project Thumbnail with zoom on hover */}
+              {/* Project Thumbnail — SVG illustration or screenshot */}
               <div className="relative aspect-video overflow-hidden bg-muted">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                   className="relative w-full h-full"
                 >
-                  {project.gallery.length > 0 ? (
+                  {project.illustration && illustrationMap[project.illustration] ? (
+                    // Render custom SVG illustration
+                    (() => {
+                      const Illustration = illustrationMap[project.illustration!];
+                      return (
+                        <div className="w-full h-full">
+                          <Illustration />
+                        </div>
+                      );
+                    })()
+                  ) : project.gallery.length > 0 ? (
                     <Image
                       src={project.gallery[0]}
                       alt={`${project.title} screenshot`}

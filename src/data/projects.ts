@@ -8,6 +8,8 @@ export interface Project {
   title: string;
   description: string;
   image: string;
+  /** SVG illustration identifier shown as card cover (optional — falls back to gallery[0] screenshot) */
+  illustration?: string;
   category: ProjectCategory;
   githubUrl: string;
   demoUrl?: string;
@@ -23,6 +25,7 @@ export const projects: Project[] = [
     description:
       "Sistem chatbot berbasis Retrieval-Augmented Generation (RAG) multi-tenant untuk customer service, dengan frontend Next.js + TypeScript dan backend FastAPI. Menggunakan embedding BGE, vector database ChromaDB, hybrid retrieval (vector + BM25), serta mendukung banyak model LLM (Groq, TinyLlama, Phi-2, Qwen2).",
     image: "/projects/rag-chatbot/screenshot-1.png",
+    illustration: "rag-chatbot",
     category: "ai-ml",
     githubUrl: "https://github.com/RickWijaya/NLP_Project",
     techStack: ["Next.js", "TypeScript", "FastAPI", "PostgreSQL", "ChromaDB", "Groq API"],
@@ -41,7 +44,8 @@ export const projects: Project[] = [
     title: "Food Predictor & Nutrition Tracker",
     description:
       "Aplikasi web berbasis Deep Learning yang mengklasifikasi gambar makanan secara real-time dan menghitung kandungan nutrisi (kalori, protein, lemak, karbohidrat) berdasarkan porsi yang dapat disesuaikan.",
-    image: "/images/projects/food-prediction.jpg", // TODO: ganti gambar
+    image: "/images/projects/food-prediction.jpg",
+    illustration: "food-nutrition",
     category: "ai-ml",
     githubUrl: "https://github.com/farissakhi/food_prediction_nutrition",
     techStack: ["Python", "TensorFlow", "Keras", "CNN", "Streamlit"],
@@ -73,6 +77,7 @@ export const projects: Project[] = [
     description:
       "Sistem parkir pintar berbasis computer vision dan IoT yang mengenali plat nomor kendaraan secara real-time untuk mengontrol palang otomatis dan memantau ketersediaan parkir.",
     image: "/projects/smart-parking/screenshot-1.jpg",
+    illustration: "smart-parking",
     category: "web",
     githubUrl: "https://github.com/farissakhi/smart-parking-system",
     techStack: ["Python", "YOLOv8", "OpenCV", "Flask-SocketIO", "ESP32"],
@@ -94,6 +99,7 @@ export const projects: Project[] = [
     description:
       "Aplikasi Android native untuk melacak keuangan pribadi, dengan sistem pencatatan pemasukan, pengeluaran, target tabungan, dan pengingat tagihan/langganan.",
     image: "/projects/finance-manager/screenshot-1.png",
+    illustration: "finance-manager",
     category: "mobile",
     githubUrl: "https://github.com/farissakhi/finance_manager",
     techStack: ["Java", "Android Studio", "Firebase Auth", "Cloud Firestore", "MPAndroidChart"],
@@ -116,6 +122,7 @@ export const projects: Project[] = [
     description:
       "Sistem point-of-sale (POS) terintegrasi untuk coffee shop dan restoran, mencakup kasir, dapur, inventori, pemesanan pelanggan, hingga presensi staf dalam satu platform.",
     image: "/projects/keshir/screenshot-1.png",
+    illustration: "keshir",
     category: "web",
     githubUrl: "https://github.com/KuroBapak/Keshir",
     techStack: ["Laravel", "PHP", "Tailwind CSS", "MySQL", "Midtrans"],
