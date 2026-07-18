@@ -24,56 +24,50 @@ export default function MobileBottomNav({ activeSection, onMenuClick }: MobileBo
   };
 
   return (
-    <div 
-      className="fixed bottom-0 left-0 w-full z-50 bg-background/80 backdrop-blur-xl border-t border-border"
-      style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+    <nav 
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 
+        w-fit px-4 py-2.5 
+        rounded-full 
+        bg-slate-900/60 backdrop-blur-md 
+        border border-slate-700/50
+        shadow-[0_8px_32px_rgba(0,0,0,0.3)]
+        flex gap-2 items-center"
+      style={{
+        marginBottom: `env(safe-area-inset-bottom)`
+      }}
     >
-      <div className="flex items-center justify-around h-16 px-2 max-w-md mx-auto">
-        {navItems.map((item) => {
-          const isActive = activeSection === item.id;
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
-              className="relative flex flex-col items-center justify-center w-14 h-full gap-1"
-              aria-label={item.label}
-            >
-              <motion.div
-                animate={{ 
-                  scale: isActive ? 1.1 : 1,
-                  color: isActive ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
-                }}
-                transition={{ duration: 0.2 }}
-                className={`relative z-10 ${isActive ? "text-emerald-400" : ""}`}
-              >
-                <Icon size={22} />
-              </motion.div>
-              <span className={`text-[10px] font-medium transition-colors ${isActive ? "text-foreground" : "text-muted-foreground"}`}>
-                {item.label}
-              </span>
-              
-              {isActive && (
-                <motion.div
-                  layoutId="mobileNavActive"
-                  className="absolute inset-0 bg-muted/50 rounded-xl -z-10"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-            </button>
-          );
-        })}
-        
-        {/* Menu Button */}
-        <button
-          onClick={onMenuClick}
-          className="relative flex flex-col items-center justify-center w-14 h-full gap-1 text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Menu"
-        >
-          <FiMenu size={22} />
-          <span className="text-[10px] font-medium">Menu</span>
-        </button>
-      </div>
-    </div>
+      {navItems.map((item) => {
+        const isActive = activeSection === item.id;
+        const Icon = item.icon;
+        return (
+          <button
+            key={item.id}
+            onClick={() => handleNavClick(item.id)}
+            aria-label={item.label}
+            className={`
+              p-2.5 rounded-full transition-all duration-300 active:scale-95
+              ${isActive 
+                ? 'bg-emerald-500/20 shadow-[0_0_15px_rgba(52,211,153,0.35)] text-emerald-400' 
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }
+            `}
+          >
+            <Icon size={22} />
+          </button>
+        );
+      })}
+      
+      {/* Separator */}
+      <div className="w-[1px] h-6 bg-slate-700/50 mx-1" />
+
+      {/* Menu Button */}
+      <button
+        onClick={onMenuClick}
+        aria-label="Menu"
+        className="p-2.5 rounded-full transition-all duration-300 active:scale-95 text-slate-400 hover:text-white hover:bg-slate-800/60"
+      >
+        <FiMenu size={22} />
+      </button>
+    </nav>
   );
 }
