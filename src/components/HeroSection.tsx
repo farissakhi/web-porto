@@ -56,7 +56,7 @@ export default function HeroSection() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/[0.04] rounded-full blur-[140px]"
+            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-400/[0.07] rounded-full blur-[140px]"
           />
           <motion.div
             animate={{
@@ -69,7 +69,7 @@ export default function HeroSection() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-white/[0.03] rounded-full blur-[120px]"
+            className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-cyan-500/[0.06] rounded-full blur-[120px]"
           />
         </div>
       )}
@@ -150,7 +150,9 @@ export default function HeroSection() {
               className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4"
             >
               Hi, I&apos;m{" "}
-              <span className="text-foreground">{profile.name}</span>
+              <span className="bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">
+                {profile.name}
+              </span>
             </motion.h1>
 
             {/* Cycling role text */}
@@ -195,7 +197,7 @@ export default function HeroSection() {
                 whileTap={{ scale: 0.97 }}
                 className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
                            bg-foreground text-background
-                           hover:opacity-90
+                           hover:opacity-90 hover:shadow-[0_0_20px_rgba(52,211,153,0.35)]
                            transition-all duration-300"
               >
                 <FiDownload

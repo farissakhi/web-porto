@@ -95,10 +95,13 @@ export default function ProjectsSection() {
               initial="hidden"
               animate="visible"
               exit="exit"
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               onClick={() => setSelectedProject(project)}
               className="group relative rounded-2xl bg-card border border-border overflow-hidden
-                         hover:border-muted-foreground/20 hover:shadow-[0_4px_24px_rgba(255,255,255,0.03)]
-                         transition-all duration-300 cursor-pointer"
+                         hover:border-muted-foreground/20
+                         hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
+                         transition-[border-color,box-shadow] duration-300 cursor-pointer"
             >
               {/* Project Thumbnail with zoom on hover */}
               <div className="relative aspect-video overflow-hidden bg-muted">

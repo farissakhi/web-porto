@@ -2,10 +2,15 @@
 
 import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSend, FiMail, FiMapPin, FiPhone, FiCheck } from "react-icons/fi";
+import { FiSend, FiMail, FiMapPin, FiPhone, FiCheck, FiAlertCircle } from "react-icons/fi";
+import emailjs from "@emailjs/browser";
 import SocialIcons from "./SocialIcons";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
 import { profile } from "@/data/profile";
+
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
 const contactInfoVariants = {
   hidden: { opacity: 0 },
@@ -30,26 +35,48 @@ export default function ContactSection() {
     email: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // TODO: Integrasi dengan form service (Formspree, EmailJS, dll.)
-    // Contoh Formspree:
-    //   fetch("https://formspree.io/f/YOUR_FORM_ID", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(formState),
-    //   });
-    //
-    // Atau gunakan mailto sebagai fallback:
-    // window.location.href = `mailto:${profile.email}?subject=Portfolio Contact from ${formState.name}&body=${formState.message}`;
+    if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      console.error(
+        "EmailJS env vars are missing. Set NEXT_PUBLIC_EMAILJS_SERVICE_ID, NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, and NEXT_PUBLIC_EMAILJS_PUBLIC_KEY."
+      );
+      setStatus("error");
+      return;
+    }
 
-    console.log("Form submitted:", formState);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-    setFormState({ name: "", email: "", message: "" });
+    setStatus("sending");
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formState.name,
+          from_email: formState.email,
+          message: formState.message,
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
+
+      setStatus("sent");
+      setFormState({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 3000);
+    } catch (error) {
+      const detail =
+        error instanceof Error
+          ? error.message
+          : error && typeof error === "object" && "text" in error
+          ? `${(error as { status?: number }).status ?? ""} ${(error as { text?: string }).text ?? ""}`.trim()
+          : String(error);
+      console.error("EmailJS send failed:", detail);
+      setStatus("error");
+    }
   };
 
   return (
@@ -57,6 +84,7 @@ export default function ContactSection() {
       <SectionHeading
         title="Get in Touch"
         subtitle="Have a project in mind? Let's work together to make it happen"
+        gradient
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
@@ -221,18 +249,18 @@ export default function ContactSection() {
 
           <motion.button
             type="submit"
-            disabled={submitted}
+            disabled={status === "sending" || status === "sent"}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="group w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
                        font-semibold text-sm
                        bg-foreground text-background
-                       hover:opacity-90
-                       disabled:opacity-70 disabled:cursor-not-allowed
+                       hover:opacity-90 hover:shadow-[0_0_20px_rgba(52,211,153,0.35)]
+                       disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:shadow-none
                        transition-all duration-300"
           >
             <AnimatePresence mode="wait">
-              {submitted ? (
+              {status === "sent" ? (
                 <motion.span
                   key="sent"
                   initial={{ opacity: 0, y: 10 }}
@@ -242,6 +270,16 @@ export default function ContactSection() {
                 >
                   <FiCheck size={16} />
                   Message Sent!
+                </motion.span>
+              ) : status === "sending" ? (
+                <motion.span
+                  key="sending"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="inline-flex items-center gap-2"
+                >
+                  Sending...
                 </motion.span>
               ) : (
                 <motion.span
@@ -260,6 +298,17 @@ export default function ContactSection() {
               )}
             </AnimatePresence>
           </motion.button>
+
+          {status === "error" && (
+            <motion.p
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 text-xs text-red-400"
+            >
+              <FiAlertCircle size={14} />
+              Failed to send message. Please try again or email me directly.
+            </motion.p>
+          )}
         </motion.form>
       </div>
 

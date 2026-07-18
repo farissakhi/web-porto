@@ -38,14 +38,22 @@ export default function SectionWrapper({
 export function SectionHeading({
   title,
   subtitle,
+  gradient = false,
 }: {
   title: string;
   subtitle?: string;
+  gradient?: boolean;
 }) {
   return (
     <div className="mb-12 md:mb-16 text-center">
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-        {title}
+        {gradient ? (
+          <span className="bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">
+            {title}
+          </span>
+        ) : (
+          title
+        )}
       </h2>
       {subtitle && (
         <p className="mt-4 text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">

@@ -156,7 +156,7 @@ export default function Navbar() {
               whileTap={{ scale: 0.97 }}
               className="px-4 py-1.5 text-xs font-semibold rounded-full
                          bg-foreground text-background
-                         hover:opacity-90
+                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(52,211,153,0.35)]
                          transition-all duration-300"
             >
               Hire Me
@@ -254,7 +254,7 @@ export default function Navbar() {
                   transition={{ delay: 0.4 }}
                   whileTap={{ scale: 0.97 }}
                   className="mt-2 px-5 py-3 text-center text-sm font-semibold rounded-full
-                             bg-foreground text-background hover:opacity-90 transition-all"
+                             bg-foreground text-background hover:opacity-90 hover:shadow-[0_0_20px_rgba(52,211,153,0.35)] transition-all"
                 >
                   Hire Me
                 </motion.a>
