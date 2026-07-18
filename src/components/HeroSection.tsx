@@ -191,8 +191,7 @@ export default function HeroSection() {
             >
               <motion.a
                 href={profile.cvFile}
-                target="_blank"
-                rel="noopener noreferrer"
+                download="CV-Faris-Sakhi.pdf"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
