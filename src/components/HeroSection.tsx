@@ -95,28 +95,15 @@ export default function HeroSection() {
         </div>
       </motion.div>
 
-      {/* Floating Social Widget (Top Right) */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8, x: 20 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-        className="absolute top-28 right-6 lg:right-12 z-20 hidden md:block"
-      >
-        <div className="glass px-6 py-4 rounded-3xl shadow-2xl flex flex-col items-center gap-2 border-white/10 bg-black/40">
-          <span className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1 font-semibold">Connect</span>
-          <SocialIcons className="grid grid-cols-2 gap-3" />
-        </div>
-      </motion.div>
-
       {/* Main Content Overlay */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col h-full pt-32 pb-20 justify-between min-h-[90vh]">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col justify-center min-h-[100vh]">
         
-        {/* Top/Center Left Text */}
+        {/* Left Text Stack */}
         <motion.div
           variants={heroStagger}
           initial="hidden"
           animate="visible"
-          className="max-w-2xl mt-12 lg:mt-24"
+          className="max-w-2xl mt-12 lg:mt-0"
         >
           <motion.div variants={heroChild} className="mb-4 inline-flex items-center gap-2">
             <span className="text-foreground/90 font-medium tracking-wide">Hey 👋 I&apos;m {profile.name.split(" ")[0]}</span>
@@ -124,13 +111,20 @@ export default function HeroSection() {
 
           <motion.h1
             variants={heroChild}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] mb-8 text-foreground"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] mb-6 text-foreground"
           >
             Software &<br />
             AI Developer
           </motion.h1>
 
-          <motion.div variants={heroChild} className="flex flex-wrap items-center gap-4">
+          <motion.p
+            variants={heroChild}
+            className="text-base sm:text-lg text-muted-foreground/90 leading-relaxed font-medium mb-10 max-w-[500px]"
+          >
+            Informatics student specializing in Artificial Intelligence. Passionate about building AI-driven solutions, full-stack applications, and bridging the gap between design and scalable engineering.
+          </motion.p>
+
+          <motion.div variants={heroChild} className="flex flex-wrap items-center gap-4 mb-12">
             <a
               href={profile.cvDrivePreview}
               target="_blank"
@@ -155,37 +149,14 @@ export default function HeroSection() {
               <FiArrowRight size={16} />
             </a>
           </motion.div>
+
+          {/* Social Icons at the bottom of the text block */}
+          <motion.div variants={heroChild} className="flex items-center gap-4">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Connect</span>
+            <div className="h-px w-8 bg-border" />
+            <SocialIcons showEmail />
+          </motion.div>
         </motion.div>
-
-        {/* Bottom Elements */}
-        <div className="flex flex-col lg:flex-row justify-between items-end gap-12 mt-32 lg:mt-auto">
-          {/* Bottom Left: Description */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="max-w-sm"
-          >
-            <p className="text-sm text-muted-foreground/80 leading-relaxed font-medium">
-              Informatics student specializing in Artificial Intelligence. Passionate about building AI-driven solutions, full-stack applications, and bridging the gap between design and scalable engineering.
-            </p>
-          </motion.div>
-
-          {/* Bottom Right: Stats */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="flex items-center gap-8 sm:gap-12"
-          >
-            {profile.aboutStats.map((stat, i) => (
-              <div key={i} className="flex flex-col gap-1">
-                <span className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{stat.value}</span>
-                <span className="text-[11px] sm:text-xs text-muted-foreground uppercase tracking-widest font-semibold">{stat.label}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
       </div>
     </section>
   );
