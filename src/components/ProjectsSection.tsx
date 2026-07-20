@@ -196,14 +196,18 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
       variants={isActiveFilterAll ? undefined : cardVariants}
       transition={{ duration: 0.4 }}
       style={isActiveFilterAll ? (motionStyle as any) : undefined}
-      whileHover={isReady || !isActiveFilterAll ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
-      onClick={() => onClick(project)}
-      className="group w-full rounded-2xl bg-card border border-border overflow-hidden
-                 hover:border-muted-foreground/20
-                 hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
-                 transition-[border-color,box-shadow] duration-300 cursor-pointer"
+      className="w-full h-full"
     >
-      <ProjectCardContent project={project} />
+      <motion.div
+        whileHover={isReady || !isActiveFilterAll ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
+        onClick={() => onClick(project)}
+        className="group w-full h-full rounded-2xl bg-card border border-border overflow-hidden
+                   hover:border-muted-foreground/20
+                   hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
+                   transition-[border-color,box-shadow] duration-300 cursor-pointer"
+      >
+        <ProjectCardContent project={project} />
+      </motion.div>
     </motion.div>
   );
 }
