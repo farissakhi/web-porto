@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { FiDownload, FiArrowRight } from "react-icons/fi";
 import Image from "next/image";
 import SocialIcons from "./SocialIcons";
@@ -26,9 +26,31 @@ const heroChild = {
   },
 };
 
+const wordContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.04, delayChildren: 0.6 },
+  },
+};
+
+const wordVariant = {
+  hidden: { opacity: 0, y: 15, filter: "blur(4px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.4, ease: "easeOut" as const },
+  },
+};
+
 export default function HeroSection() {
   const prefersReduced = useReducedMotion();
   const [roleIndex, setRoleIndex] = useState(0);
+
+  const { scrollY } = useScroll();
+  const imageRotate = useTransform(scrollY, [0, 600], [0, 15]);
+  const imageScale = useTransform(scrollY, [0, 600], [1, 0.9]);
+  const bgY = useTransform(scrollY, [0, 1000], [0, 300]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -37,6 +59,8 @@ export default function HeroSection() {
     return () => clearInterval(timer);
   }, []);
 
+  const descriptionWords = profile.description.split(" ");
+
   return (
     <section
       id="home"
@@ -44,7 +68,7 @@ export default function HeroSection() {
     >
       {/* Ambient gradient blobs — slow looping motion, very low opacity */}
       {!prefersReduced && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
             animate={{
               x: [0, 60, -30, 0],
@@ -71,7 +95,7 @@ export default function HeroSection() {
             }}
             className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-cyan-500/[0.06] rounded-full blur-[120px]"
           />
-        </div>
+        </motion.div>
       )}
 
       {/* Subtle grid pattern */}
@@ -86,11 +110,12 @@ export default function HeroSection() {
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 w-full py-20 pt-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left: Profile Image with floating animation */}
+          {/* Left: Profile Image with floating and scroll animation */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: "easeOut" as const }}
+            style={!prefersReduced ? { rotate: imageRotate, scale: imageScale } : {}}
             className="flex justify-center lg:justify-start order-1"
           >
             <div className="relative">
@@ -173,12 +198,21 @@ export default function HeroSection() {
               </div>
             </motion.div>
 
-            <motion.p
-              variants={heroChild}
-              className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8"
+            {/* Description Text Reveal (Per Word) */}
+            <motion.div
+              variants={wordContainer}
+              className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8 flex flex-wrap justify-center lg:justify-start"
             >
-              {profile.description}
-            </motion.p>
+              {descriptionWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  variants={wordVariant}
+                  className="mr-[0.25em]"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.div>
 
             {/* CTA Buttons */}
             <motion.div
