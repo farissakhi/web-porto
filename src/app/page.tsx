@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import MobileNav from "@/components/MobileNav";
 import ScrollProgress from "@/components/ScrollProgress";
+import StarryBackground from "@/components/StarryBackground";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import SkillsSection from "@/components/SkillsSection";
@@ -23,6 +24,7 @@ export default function Home() {
         <Navbar />
       </div>
       <MobileNav />
+      <StarryBackground />
       <main>
         <HeroSection />
         <div className="section-divider" />
