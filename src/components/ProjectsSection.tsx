@@ -151,11 +151,13 @@ function ProjectCardContent({ project }: { project: any }) {
   );
 }
 
-function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress, isMobile, onClick }: any) {
+function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress, isMobile, activeFilter, onClick }: any) {
   // data contains { startX, startY } relative to this card's native grid position
   const isReady = !!data;
   const startX = data ? data.startX : 0;
   const startY = data ? data.startY : 0;
+  
+  const isActiveFilterAll = activeFilter === "all";
 
   // Animate from stack offset to (0,0) native grid position
   const x = useTransform(scrollYProgress, [0, 1], [isMobile ? 0 : startX, 0]);
@@ -171,18 +173,28 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
   // Fade in during the first 30% of the animation so they seem to materialize from behind the text
   const opacity = isMobile ? useTransform(scrollYProgress, [0, 1], [0, 1]) : useTransform(scrollYProgress, [0, 0.3, 1], [0, 1, 1]);
 
+  // If we are filtering, we don't use the scroll animation. We just use standard layout animations.
+  const motionStyle = isActiveFilterAll ? {
+    x,
+    y,
+    rotate,
+    scale,
+    opacity,
+    zIndex: totalItems - index,
+    visibility: (isReady || isMobile) ? "visible" : "hidden",
+    willChange: "transform",
+  } : {
+    zIndex: totalItems - index,
+  };
+
   return (
     <motion.div
-      style={{
-        x,
-        y,
-        rotate,
-        scale,
-        opacity,
-        zIndex: totalItems - index,
-        visibility: (isReady || isMobile) ? "visible" : "hidden",
-        willChange: "transform",
-      }}
+      layout={!isActiveFilterAll}
+      initial={!isActiveFilterAll ? { opacity: 0, scale: 0.9, y: 20 } : undefined}
+      animate={!isActiveFilterAll ? { opacity: 1, scale: 1, y: 0 } : undefined}
+      exit={!isActiveFilterAll ? { opacity: 0, scale: 0.9, y: 20 } : undefined}
+      transition={{ duration: 0.4 }}
+      style={motionStyle as any}
       whileHover={isReady ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
       onClick={() => onClick(project)}
       className="group w-full rounded-2xl bg-card border border-border overflow-hidden
@@ -337,6 +349,7 @@ export default function ProjectsSection() {
                 data={transformData[index]}
                 scrollYProgress={smoothProgress}
                 isMobile={isMobile}
+                activeFilter={activeFilter}
                 onClick={setSelectedProject}
               />
             ))}
