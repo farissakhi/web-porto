@@ -154,11 +154,10 @@ function ProjectCardContent({ project }: { project: any }) {
 function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress, isMobile, onClick }: any) {
   const isReady = !!data;
 
-  // Stagger the spread based on index
-  const staggerDelay = 0.08;
-  const maxStart = 0.5; // leave enough room for animation to finish
-  const startScroll = Math.min(index * staggerDelay, maxStart);
-  const endScroll = Math.min(startScroll + 0.4, 1);
+  // Remove stagger to ensure all cards move perfectly in sync with the scroll,
+  // which prevents the visual "patah-patah" (stuttering) caused by cards starting/stopping at different times.
+  const startScroll = 0;
+  const endScroll = 1;
 
   const startX = data ? data.stackX : 0;
   const startY = data ? data.stackY : 0;
@@ -177,8 +176,8 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
   const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 2 : -index * 2);
   const rotate = useTransform(scrollYProgress, [startScroll, endScroll], [stackedRotate, 0]);
   
-  // Scale from slightly smaller so it looks like a deck behind the text
-  const stackedScale = isMobile ? 1 : 0.8;
+  // Scale from slightly smaller so it looks like a deck
+  const stackedScale = isMobile ? 1 : 0.9;
   const scale = useTransform(scrollYProgress, [startScroll, endScroll], [stackedScale, 1]);
   
   // Keep it fully visible so the user actually sees the stack waiting behind the text!
@@ -265,17 +264,6 @@ export default function ProjectsSection() {
       const cRect = containerRef.current!.getBoundingClientRect();
       const cells = Array.from(gridRef.current!.children);
       
-      // Calculate heading position if available, to stack behind it
-      const headingEl = document.getElementById("projects-heading");
-      let hCenterY = 0;
-      let hCenterX = cRect.width / 2;
-
-      if (headingEl) {
-        const hRect = headingEl.getBoundingClientRect();
-        hCenterY = hRect.top - cRect.top + (hRect.height / 2);
-        hCenterX = hRect.left - cRect.left + (hRect.width / 2);
-      }
-      
       const data = cells.map(cell => {
         const rect = cell.getBoundingClientRect();
         return {
@@ -283,8 +271,8 @@ export default function ProjectsSection() {
           y: rect.top - cRect.top,
           width: rect.width,
           height: rect.height,
-          stackX: hCenterX - (rect.width / 2),
-          stackY: hCenterY - (rect.height / 2), // Stack exactly behind the center of the heading
+          stackX: (cRect.width / 2) - (rect.width / 2),
+          stackY: 0, // Stack exactly at the top of the grid, perfectly below the tabs
         };
       });
       setTransformData(data);
@@ -312,7 +300,13 @@ export default function ProjectsSection() {
       </div>
 
       {/* Filter Tabs with animated indicator */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-12 relative z-50">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-wrap items-center justify-center gap-2 mb-12 relative z-50"
+      >
         {projectCategories.map((cat) => (
           <button
             key={cat.value}
@@ -338,7 +332,7 @@ export default function ProjectsSection() {
             {cat.label}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Projects Grid / Stack */}
       <div ref={containerRef} className="relative min-h-[400px]">
