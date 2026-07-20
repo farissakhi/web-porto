@@ -62,7 +62,7 @@ export default function AboutSection() {
           variants={wordContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           className="lg:col-span-3"
         >
           <div className="space-y-4">
@@ -104,7 +104,7 @@ export default function AboutSection() {
           variants={statsContainerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           className="lg:col-span-2"
         >
           <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">

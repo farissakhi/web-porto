@@ -54,7 +54,7 @@ export default function SkillsSection() {
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.2 }}
               className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2.5"
             >
               {category.skills.map((skill) => {

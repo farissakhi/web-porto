@@ -93,7 +93,7 @@ export default function ContactSection() {
           variants={contactInfoVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           className="lg:col-span-2 space-y-8"
         >
           <motion.div variants={contactInfoItem}>
@@ -174,7 +174,7 @@ export default function ContactSection() {
           onSubmit={handleSubmit}
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.5, delay: 0.15 }}
           className="lg:col-span-3 space-y-4 p-6 md:p-8 rounded-2xl bg-card border border-border"
         >
