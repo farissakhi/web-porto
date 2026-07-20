@@ -75,7 +75,7 @@ export default function HeroSection() {
         className="absolute inset-0 z-0 flex justify-end"
       >
         <div 
-          className="relative w-full h-[90vh] lg:h-screen lg:w-[80vw] xl:w-[70vw]"
+          className="relative w-full h-[90vh] lg:h-screen lg:w-[85vw] xl:w-[75vw]"
           style={{
             maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
@@ -86,12 +86,12 @@ export default function HeroSection() {
             alt={profile.name}
             fill
             quality={100}
-            sizes="(max-width: 1024px) 100vw, 80vw"
+            sizes="(max-width: 1024px) 100vw, 85vw"
             className="object-cover object-[85%_top] lg:object-[85%_center] grayscale-[20%]"
             priority
           />
           {/* Gradient overlay on the left to blend into the black background seamlessly */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent w-[70%] lg:w-[50%]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent w-[90%] lg:w-[65%]" />
         </div>
       </motion.div>
 
@@ -103,7 +103,7 @@ export default function HeroSection() {
           variants={heroStagger}
           initial="hidden"
           animate="visible"
-          className="max-w-2xl mt-12 lg:mt-0"
+          className="max-w-3xl mt-12 lg:mt-0"
         >
           <motion.div variants={heroChild} className="mb-4 inline-flex items-center gap-2">
             <span className="text-foreground/90 font-medium tracking-wide">Hey 👋 I&apos;m {profile.name.split(" ")[0]}</span>
@@ -111,7 +111,7 @@ export default function HeroSection() {
 
           <motion.h1
             variants={heroChild}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] mb-6 text-foreground"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter leading-[1.05] mb-6 text-foreground"
           >
             Software &<br />
             AI Developer
@@ -119,7 +119,7 @@ export default function HeroSection() {
 
           <motion.p
             variants={heroChild}
-            className="text-base sm:text-lg text-muted-foreground/90 leading-relaxed font-medium mb-10 max-w-[500px]"
+            className="text-base sm:text-lg text-muted-foreground/90 leading-relaxed font-medium mb-10 max-w-xl"
           >
             Informatics student specializing in Artificial Intelligence. Passionate about building AI-driven solutions, full-stack applications, and bridging the gap between design and scalable engineering.
           </motion.p>
