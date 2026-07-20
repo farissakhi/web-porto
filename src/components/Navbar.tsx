@@ -1,21 +1,38 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { FiSun, FiMoon, FiMenu, FiX, FiDownload } from "react-icons/fi";
 import { useTheme } from "./ThemeProvider";
 import { profile } from "@/data/profile";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
+  const [isShrunk, setIsShrunk] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsAtTop(latest <= 50);
+    const previous = scrollY.getPrevious() || 0;
+    
+    if (latest > 50) {
+      if (latest > previous) {
+        setIsShrunk(true); // scrolling down
+      } else {
+        setIsShrunk(false); // scrolling up
+      }
+    } else {
+      setIsShrunk(false); // at top
+    }
+  });
+
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-
       const sections = profile.navLinks.map((link) =>
         link.href.replace("#", "")
       );
@@ -59,15 +76,15 @@ export default function Navbar() {
         className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-4xl"
       >
         <motion.nav
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           animate={{
-            paddingTop: scrolled ? "0.375rem" : "0.5rem",
-            paddingBottom: scrolled ? "0.375rem" : "0.5rem",
-            paddingLeft: scrolled ? "1rem" : "1.25rem",
-            paddingRight: scrolled ? "1rem" : "1.25rem",
+            padding: isShrunk && !isHovered && !mobileOpen ? "8px 16px" : "16px 28px",
+            gap: isShrunk && !isHovered && !mobileOpen ? "12px" : "24px",
           }}
           transition={{ duration: 0.35, ease: "easeInOut" }}
-          className={`flex items-center justify-between rounded-full transition-all duration-500 ${
-            scrolled
+          className={`flex items-center justify-between rounded-full transition-colors duration-500 ${
+            !isAtTop
               ? "glass shadow-[0_0_30px_rgba(0,0,0,0.4)] border-muted-foreground/10"
               : "bg-card/60 backdrop-blur-xl border border-border"
           }`}
@@ -79,15 +96,19 @@ export default function Navbar() {
               e.preventDefault();
               handleNavClick("#home");
             }}
+            animate={{
+              fontSize: isShrunk && !isHovered && !mobileOpen ? "13px" : "15px",
+            }}
+            transition={{ duration: 0.35 }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="text-sm font-bold tracking-tight hover:opacity-70 transition-opacity shrink-0"
+            className="font-bold tracking-tight hover:opacity-70 transition-opacity shrink-0"
           >
             {profile.name}
           </motion.a>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-0.5">
+          <div className="hidden md:flex items-center gap-1">
             {profile.navLinks.map((link) => (
               <a
                 key={link.href}
@@ -96,7 +117,8 @@ export default function Navbar() {
                   e.preventDefault();
                   handleNavClick(link.href);
                 }}
-                className={`relative px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300
+                className={`relative font-medium rounded-full transition-all duration-300
+                  ${isShrunk && !isHovered && !mobileOpen ? "px-2.5 py-1 text-[12px]" : "px-3.5 py-1.5 text-sm"}
                   ${
                     activeSection === link.href.replace("#", "")
                       ? "text-foreground"
@@ -126,7 +148,11 @@ export default function Navbar() {
               aria-label="Toggle theme"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="flex items-center justify-center w-7 h-7 rounded-full border border-border
+              animate={{
+                width: isShrunk && !isHovered && !mobileOpen ? "24px" : "32px",
+                height: isShrunk && !isHovered && !mobileOpen ? "24px" : "32px",
+              }}
+              className="flex items-center justify-center rounded-full border border-border
                          hover:border-muted-foreground/40 hover:bg-muted transition-all duration-300"
             >
               <AnimatePresence mode="wait">
@@ -138,9 +164,9 @@ export default function Navbar() {
                   transition={{ duration: 0.2 }}
                 >
                   {theme === "dark" ? (
-                    <FiSun size={13} className="text-muted-foreground" />
+                    <FiSun size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} className="text-muted-foreground" />
                   ) : (
-                    <FiMoon size={13} className="text-muted-foreground" />
+                    <FiMoon size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} className="text-muted-foreground" />
                   )}
                 </motion.div>
               </AnimatePresence>
@@ -154,7 +180,11 @@ export default function Navbar() {
               }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="px-4 py-1.5 text-xs font-semibold rounded-full
+              animate={{
+                padding: isShrunk && !isHovered && !mobileOpen ? "4px 12px" : "6px 16px",
+                fontSize: isShrunk && !isHovered && !mobileOpen ? "12px" : "14px",
+              }}
+              className="font-semibold rounded-full
                          bg-foreground text-background
                          hover:opacity-90 hover:shadow-[0_0_20px_rgba(52,211,153,0.35)]
                          transition-all duration-300"
@@ -165,20 +195,36 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-2">
-            <button
+            <motion.button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="flex items-center justify-center w-8 h-8 rounded-full border border-border transition-all"
+              animate={{
+                width: isShrunk && !isHovered && !mobileOpen ? "28px" : "32px",
+                height: isShrunk && !isHovered && !mobileOpen ? "28px" : "32px",
+              }}
+              className="flex items-center justify-center rounded-full border border-border transition-all"
             >
-              {theme === "dark" ? <FiSun size={14} /> : <FiMoon size={14} />}
-            </button>
-            <button
+              {theme === "dark" ? (
+                <FiSun size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} />
+              ) : (
+                <FiMoon size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} />
+              )}
+            </motion.button>
+            <motion.button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
-              className="flex items-center justify-center w-8 h-8 rounded-full border border-border transition-all"
+              animate={{
+                width: isShrunk && !isHovered && !mobileOpen ? "28px" : "32px",
+                height: isShrunk && !isHovered && !mobileOpen ? "28px" : "32px",
+              }}
+              className="flex items-center justify-center rounded-full border border-border transition-all"
             >
-              {mobileOpen ? <FiX size={16} /> : <FiMenu size={16} />}
-            </button>
+              {mobileOpen ? (
+                <FiX size={isShrunk && !isHovered && !mobileOpen ? 14 : 16} />
+              ) : (
+                <FiMenu size={isShrunk && !isHovered && !mobileOpen ? 14 : 16} />
+              )}
+            </motion.button>
           </div>
         </motion.nav>
       </motion.header>
