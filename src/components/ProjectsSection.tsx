@@ -189,10 +189,14 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
 
   return (
     <motion.div
-      layout={false}
+      layout={!isActiveFilterAll}
+      initial={isActiveFilterAll ? false : "hidden"}
+      animate={isActiveFilterAll ? undefined : "visible"}
+      exit={isActiveFilterAll ? undefined : "exit"}
+      variants={isActiveFilterAll ? undefined : cardVariants}
       transition={{ duration: 0.4 }}
-      style={motionStyle as any}
-      whileHover={isReady ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
+      style={isActiveFilterAll ? (motionStyle as any) : undefined}
+      whileHover={isReady || !isActiveFilterAll ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
       onClick={() => onClick(project)}
       className="group w-full rounded-2xl bg-card border border-border overflow-hidden
                  hover:border-muted-foreground/20
@@ -268,11 +272,11 @@ export default function ProjectsSection() {
       }
 
       const data = cells.map(cell => {
-        const rect = cell.getBoundingClientRect();
-        
-        // Calculate the translation needed to move the card FROM its native grid position TO the stack position behind the heading
-        const startX = targetStackX - (rect.left - cRect.left + rect.width / 2);
-        const startY = targetStackY - (rect.top - cRect.top + rect.height / 2);
+        const htmlCell = cell as HTMLElement;
+        // Gunakan offsetLeft/Top yang mengabaikan CSS transform.
+        // Ini mencegah bug recursive scaling/translating di mana posisi terbang menjauh.
+        const startX = targetStackX - (htmlCell.offsetLeft + htmlCell.offsetWidth / 2);
+        const startY = targetStackY - (htmlCell.offsetTop + htmlCell.offsetHeight / 2);
         
         return { startX, startY };
       });
