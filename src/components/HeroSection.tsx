@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { FiDownload, FiArrowRight } from "react-icons/fi";
 import Image from "next/image";
 import SocialIcons from "./SocialIcons";
 import { profile } from "@/data/profile";
 
-const roles = ["Full Stack Developer", "AI/ML Enthusiast", "Problem Solver"];
-const CYCLE_INTERVAL = 3000;
-
 const heroStagger = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.4 },
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
   },
 };
 
@@ -22,70 +19,41 @@ const heroChild = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
-
-const wordContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.04, delayChildren: 0.6 },
-  },
-};
-
-const wordVariant = {
-  hidden: { opacity: 0, y: 15, filter: "blur(4px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.4, ease: "easeOut" as const },
+    transition: { duration: 0.6, ease: "easeOut" as const },
   },
 };
 
 export default function HeroSection() {
   const prefersReduced = useReducedMotion();
-  const [roleIndex, setRoleIndex] = useState(0);
-
   const { scrollY } = useScroll();
-  const imageRotate = useTransform(scrollY, [0, 600], [0, 15]);
-  const imageScale = useTransform(scrollY, [0, 600], [1, 0.9]);
-  const bgY = useTransform(scrollY, [0, 1000], [0, 300]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % roles.length);
-    }, CYCLE_INTERVAL);
-    return () => clearInterval(timer);
-  }, []);
-
-  const descriptionWords = profile.description.split(" ");
+  const imageY = useTransform(scrollY, [0, 800], [0, 100]);
+  const bgY = useTransform(scrollY, [0, 1000], [0, 200]);
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden scroll-mt-6"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-6 bg-background"
     >
-      {/* Ambient gradient blobs — slow looping motion, very low opacity */}
+      {/* Ambient B&W "City Light" Blobs */}
       {!prefersReduced && (
-        <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none overflow-hidden z-0">
           <motion.div
             animate={{
-              x: [0, 60, -30, 0],
+              x: [0, 50, -30, 0],
               y: [0, -40, 20, 0],
-              scale: [1, 1.15, 0.95, 1],
+              scale: [1, 1.1, 0.9, 1],
             }}
             transition={{
-              duration: 20,
+              duration: 22,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-400/[0.07] rounded-full blur-[140px]"
+            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-zinc-300/[0.04] rounded-full blur-[140px]"
           />
           <motion.div
             animate={{
-              x: [0, -50, 40, 0],
-              y: [0, 30, -50, 0],
+              x: [0, -40, 30, 0],
+              y: [0, 30, -40, 0],
               scale: [1, 0.9, 1.1, 1],
             }}
             transition={{
@@ -93,196 +61,129 @@ export default function HeroSection() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-cyan-500/[0.06] rounded-full blur-[120px]"
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-white/[0.03] rounded-full blur-[120px]"
           />
         </motion.div>
       )}
 
-      {/* Subtle grid pattern */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.02]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+      {/* Large Portrait Image Background */}
+      <motion.div 
+        style={!prefersReduced ? { y: imageY } : {}}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="absolute inset-0 z-0 flex items-end justify-center lg:justify-end lg:pr-[10%]"
+      >
+        <div 
+          className="relative w-[150vw] h-[85vh] sm:w-[90vw] md:w-[75vw] lg:w-[60vw] lg:h-[95vh]"
+          style={{
+            maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
+          }}
+        >
+          <Image
+            src={profile.profileImage}
+            alt={profile.name}
+            fill
+            sizes="(max-width: 1024px) 100vw, 60vw"
+            className="object-cover object-top lg:object-center grayscale-[20%]" // slight grayscale to match the b&w mood
+            priority
+          />
+        </div>
+      </motion.div>
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 w-full py-20 pt-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left: Profile Image with floating and scroll animation */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, ease: "easeOut" as const }}
-            style={!prefersReduced ? { rotate: imageRotate, scale: imageScale } : {}}
-            className="flex justify-center lg:justify-start order-1"
-          >
-            <div className="relative">
-              {/* Floating wrapper */}
-              <motion.div
-                animate={
-                  prefersReduced
-                    ? {}
-                    : { y: [0, -10, 0] }
-                }
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full p-2 border border-border bg-card/80 shadow-2xl"
-              >
-                {/* Inner ring */}
-                <div className="relative w-full h-full rounded-full border border-muted-foreground/20 overflow-hidden">
-                  <Image
-                    src={profile.profileImage}
-                    alt={profile.name}
-                    fill
-                    sizes="(max-width: 640px) 256px, (max-width: 768px) 288px, 320px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              </motion.div>
-            </div>
+      {/* Floating Social Widget (Top Right) */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8, x: 20 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="absolute top-28 right-6 lg:right-12 z-20 hidden md:block"
+      >
+        <div className="glass px-6 py-4 rounded-3xl shadow-2xl flex flex-col items-center gap-2 border-white/10 bg-black/40">
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1 font-semibold">Connect</span>
+          <SocialIcons className="grid grid-cols-2 gap-3" />
+        </div>
+      </motion.div>
+
+      {/* Main Content Overlay */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col h-full pt-32 pb-20 justify-between min-h-[90vh]">
+        
+        {/* Top/Center Left Text */}
+        <motion.div
+          variants={heroStagger}
+          initial="hidden"
+          animate="visible"
+          className="max-w-2xl mt-12 lg:mt-24"
+        >
+          <motion.div variants={heroChild} className="mb-4 inline-flex items-center gap-2">
+            <span className="text-foreground/90 font-medium tracking-wide">Hey 👋 I&apos;m {profile.name.split(" ")[0]}</span>
           </motion.div>
 
-          {/* Right: Text Content — staggered fade-in on mount */}
-          <motion.div
-            variants={heroStagger}
-            initial="hidden"
-            animate="visible"
-            className="text-center lg:text-left order-2"
+          <motion.h1
+            variants={heroChild}
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] mb-8 text-foreground"
           >
-            {/* Badge */}
-            <motion.div
-              variants={heroChild}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-card mb-6"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-muted-foreground font-medium">
-                Available for work
-              </span>
-            </motion.div>
+            Software &<br />
+            AI Developer
+          </motion.h1>
 
-            <motion.h1
-              variants={heroChild}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4"
+          <motion.div variants={heroChild} className="flex flex-wrap items-center gap-4">
+            <a
+              href={profile.cvDrivePreview}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm
+                         bg-foreground text-background hover:scale-105 active:scale-95
+                         transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
             >
-              Hi, I&apos;m{" "}
-              <span className="bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
-                {profile.name}
-              </span>
-            </motion.h1>
+              Get My CV
+            </a>
+            <a
+              href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm
+                         border border-border/50 text-foreground/80 glass hover:bg-white/5
+                         transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              View Projects
+              <FiArrowRight size={16} />
+            </a>
+          </motion.div>
+        </motion.div>
 
-            {/* Cycling role text */}
-            <motion.div
-              variants={heroChild}
-              className="flex items-center gap-3 justify-center lg:justify-start mb-6"
-            >
-              <div className="h-px w-8 bg-muted-foreground/50" />
-              <div className="relative h-7 overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={roleIndex}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -16 }}
-                    transition={{ duration: 0.35, ease: "easeInOut" }}
-                    className="text-lg sm:text-xl font-medium text-muted-foreground whitespace-nowrap"
-                  >
-                    {roles[roleIndex]}
-                  </motion.p>
-                </AnimatePresence>
+        {/* Bottom Elements */}
+        <div className="flex flex-col lg:flex-row justify-between items-end gap-12 mt-32 lg:mt-auto">
+          {/* Bottom Left: Description */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="max-w-sm"
+          >
+            <p className="text-sm text-muted-foreground/80 leading-relaxed font-medium">
+              Informatics student specializing in Artificial Intelligence. Passionate about building AI-driven solutions, full-stack applications, and bridging the gap between design and scalable engineering.
+            </p>
+          </motion.div>
+
+          {/* Bottom Right: Stats */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="flex items-center gap-8 sm:gap-12"
+          >
+            {profile.aboutStats.map((stat, i) => (
+              <div key={i} className="flex flex-col gap-1">
+                <span className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{stat.value}</span>
+                <span className="text-[11px] sm:text-xs text-muted-foreground uppercase tracking-widest font-semibold">{stat.label}</span>
               </div>
-            </motion.div>
-
-            {/* Description Text Reveal (Per Word) */}
-            <motion.div
-              variants={wordContainer}
-              className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8 flex flex-wrap justify-center lg:justify-start"
-            >
-              {descriptionWords.map((word, i) => (
-                <motion.span
-                  key={i}
-                  variants={wordVariant}
-                  className="mr-[0.25em]"
-                >
-                  {word}
-                </motion.span>
-              ))}
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div
-              variants={heroChild}
-              className="flex flex-wrap items-center gap-3 justify-center lg:justify-start mb-8"
-            >
-              <motion.a
-                href={profile.cvDrivePreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
-                           bg-foreground text-background
-                           hover:opacity-90 hover:shadow-[0_0_20px_rgba(52,211,153,0.35)]
-                           transition-all duration-300"
-              >
-                <FiDownload
-                  size={16}
-                  className="group-hover:animate-bounce"
-                />
-                Get My CV
-              </motion.a>
-
-              <motion.a
-                href="#projects"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document
-                    .getElementById("projects")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm
-                           border border-border text-foreground
-                           hover:bg-card hover:border-muted-foreground/30
-                           transition-all duration-300"
-              >
-                View Projects
-                <FiArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </motion.a>
-            </motion.div>
-
-            {/* Social Icons */}
-            <motion.div variants={heroChild}>
-              <SocialIcons showEmail className="justify-center lg:justify-start" />
-            </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-5 h-8 rounded-full border-2 border-border flex justify-center pt-1.5"
-        >
-          <div className="w-1 h-2 rounded-full bg-muted-foreground/40" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }
