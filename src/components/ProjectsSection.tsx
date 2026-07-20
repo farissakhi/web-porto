@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import { projects, projectCategories, type ProjectCategory, type Project } from "@/data/projects";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
@@ -40,55 +40,12 @@ const cardVariants = {
   },
 };
 
-import { useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-
-function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgress, onClick }: any) {
-  const isMobile = columns === 1;
-
-  const col = index % columns;
-  const row = Math.floor(index / columns);
-  const centerCol = (columns - 1) / 2;
-  const centerRow = 0; // Stack at the first row (right under the heading)
-
-  // Move them towards the center column of the first row
-  const startX = isMobile ? "0%" : `${(centerCol - col) * 110}%`;
-  const startY = isMobile ? "20%" : `${(centerRow - row) * 110}%`;
-
-  // Stagger the spread based on index
-  const staggerDelay = 0.08;
-  const maxStart = 0.5; // leave enough room for animation to finish
-  const startScroll = Math.min(index * staggerDelay, maxStart); 
-  const endScroll = Math.min(startScroll + 0.4, 1);
-
-  // Stacked state rotation (messy deck of cards)
-  const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 3 : -index * 3);
-  const stackedScale = isMobile ? 1 : Math.max(1 - index * 0.02, 0.85);
-
-  const x = useTransform(scrollYProgress, [startScroll, endScroll], [startX, "0%"]);
-  const y = useTransform(scrollYProgress, [startScroll, endScroll], [startY, "0%"]);
-  const rotate = useTransform(scrollYProgress, [startScroll, endScroll], [stackedRotate, 0]);
-  const scale = useTransform(scrollYProgress, [startScroll, endScroll], [stackedScale, 1]);
-  const opacity = useTransform(scrollYProgress, [startScroll, endScroll], [isMobile ? 0 : 1, 1]);
-
+function ProjectCardContent({ project }: { project: any }) {
   return (
-    <motion.div
-      layout
-      layoutId={project.title}
-      style={{ x, y, rotate, scale, opacity, zIndex: totalItems - index }}
-      whileHover={{ y: -6, transition: { duration: 0.2 } }}
-      onClick={() => onClick(project)}
-      className="group relative rounded-2xl bg-card border border-border overflow-hidden
-                 hover:border-muted-foreground/20
-                 hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
-                 transition-[border-color,box-shadow] duration-300 cursor-pointer w-full"
-    >
-      {/* Project Thumbnail — SVG illustration or screenshot */}
+    <>
+      {/* Project Thumbnail */}
       <div className="relative aspect-video overflow-hidden bg-muted">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="relative w-full h-full"
-        >
+        <div className="relative w-full h-full">
           {project.illustration && illustrationMap[project.illustration] ? (
             (() => {
               const Illustration = illustrationMap[project.illustration];
@@ -109,18 +66,14 @@ function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgr
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
               <span className="text-xl font-bold text-muted-foreground/30">
-                {project.title
-                  .split(" ")
-                  .map((w: string) => w[0])
-                  .join("")}
+                {project.title.split(" ").map((w: string) => w[0]).join("")}
               </span>
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* Hover overlay with quick-links */}
-        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100
-                        transition-opacity duration-300 flex items-center justify-center gap-3">
+        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
           <motion.a
             href={project.githubUrl}
             target="_blank"
@@ -128,8 +81,7 @@ function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgr
             onClick={(e) => e.stopPropagation()}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
-                       hover:bg-white/20 transition-all duration-200 text-white"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200 text-white"
             aria-label={`GitHub repo for ${project.title}`}
           >
             <FiGithub size={18} />
@@ -142,8 +94,7 @@ function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgr
               onClick={(e) => e.stopPropagation()}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20
-                         hover:bg-white/20 transition-all duration-200 text-white"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200 text-white"
               aria-label={`Live demo for ${project.title}`}
             >
               <FiExternalLink size={18} />
@@ -164,11 +115,7 @@ function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgr
         {/* Tech Stack Badges */}
         <div className="flex flex-wrap gap-1.5">
           {project.techStack.map((tech: string) => (
-            <span
-              key={tech}
-              className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-muted text-muted-foreground
-                         border border-border"
-            >
+            <span key={tech} className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-muted text-muted-foreground border border-border">
               {tech}
             </span>
           ))}
@@ -182,8 +129,7 @@ function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgr
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground
-                     hover:text-foreground transition-colors duration-300"
+          className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors duration-300"
         >
           <FiGithub size={13} />
           Source Code
@@ -194,47 +140,138 @@ function AnimatedProjectCard({ project, index, totalItems, columns, scrollYProgr
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground
-                       hover:text-foreground transition-colors duration-300"
+            className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors duration-300"
           >
             <FiExternalLink size={13} />
             Live Demo
           </a>
         )}
       </div>
+    </>
+  );
+}
+
+function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress, isMobile, onClick }: any) {
+  const isReady = !!data;
+
+  // Stagger the spread based on index
+  const staggerDelay = 0.08;
+  const maxStart = 0.5; // leave enough room for animation to finish
+  const startScroll = Math.min(index * staggerDelay, maxStart);
+  const endScroll = Math.min(startScroll + 0.4, 1);
+
+  const startX = data ? data.stackX : 0;
+  const startY = data ? data.stackY : 0;
+  const endX = data ? data.x : 0;
+  const endY = data ? data.y : 0;
+
+  // On mobile, just simple vertical fade/slide. On desktop, stack and spread.
+  const mobileY = useTransform(scrollYProgress, [startScroll, endScroll], [50, 0]);
+  const desktopX = useTransform(scrollYProgress, [startScroll, endScroll], [startX, endX]);
+  const desktopY = useTransform(scrollYProgress, [startScroll, endScroll], [startY, endY]);
+
+  const x = isMobile ? 0 : desktopX;
+  const y = isMobile ? mobileY : desktopY;
+
+  // Stacked state rotation (messy deck of cards)
+  const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 3 : -index * 3);
+  const rotate = useTransform(scrollYProgress, [startScroll, endScroll], [stackedRotate, 0]);
+  const scale = useTransform(scrollYProgress, [startScroll, endScroll], [isMobile ? 1 : Math.max(1 - index * 0.02, 0.85), 1]);
+  const opacity = useTransform(scrollYProgress, [startScroll, endScroll], [isMobile ? 0 : 1, 1]);
+
+  return (
+    <motion.div
+      layoutId={`card-${project.title}`}
+      style={{
+        position: isMobile ? "relative" : "absolute",
+        top: 0,
+        left: 0,
+        width: isMobile ? "100%" : data?.width || "100%",
+        height: isMobile ? "auto" : data?.height || "auto",
+        x,
+        y,
+        rotate,
+        scale,
+        opacity,
+        zIndex: totalItems - index,
+        visibility: (isReady || isMobile) ? "visible" : "hidden"
+      }}
+      whileHover={isReady ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
+      onClick={() => onClick(project)}
+      className="group rounded-2xl bg-card border border-border overflow-hidden
+                 hover:border-muted-foreground/20
+                 hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
+                 transition-[border-color,box-shadow] duration-300 cursor-pointer"
+    >
+      <ProjectCardContent project={project} />
     </motion.div>
   );
 }
+
+type TransformData = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  stackX: number;
+  stackY: number;
+};
 
 export default function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<"all" | ProjectCategory>("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const gridRef = React.useRef<HTMLDivElement>(null);
   
+  const [transformData, setTransformData] = useState<TransformData[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
   // Track scroll through the section to drive the animation
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["0 85%", "0 25%"], // Start when top hits 85% of viewport, end when it hits 25%
+    // Start spreading when the top of the container hits 60% of viewport (user sees the stack clearly)
+    // Finish spreading when it hits 10% (near the top)
+    offset: ["0 60%", "0 10%"],
   });
-
-  const [columns, setColumns] = useState(3);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) setColumns(1);
-      else if (window.innerWidth < 1024) setColumns(2);
-      else setColumns(3);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const filteredProjects =
     activeFilter === "all"
       ? projects
       : projects.filter((p) => p.category === activeFilter);
+
+  React.useEffect(() => {
+    if (!gridRef.current || !containerRef.current) return;
+
+    const measure = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      
+      if (mobile) return; // Skip measurement on mobile
+
+      const cRect = containerRef.current!.getBoundingClientRect();
+      const cells = Array.from(gridRef.current!.children);
+      
+      const data = cells.map(cell => {
+        const rect = cell.getBoundingClientRect();
+        return {
+          x: rect.left - cRect.left,
+          y: rect.top - cRect.top,
+          width: rect.width,
+          height: rect.height,
+          stackX: cRect.width / 2 - rect.width / 2, // Stack in exact center X
+          stackY: 0, // Stack at top of grid
+        };
+      });
+      setTransformData(data);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(gridRef.current);
+    
+    return () => observer.disconnect();
+  }, [filteredProjects]);
 
   return (
     <SectionWrapper id="projects">
@@ -274,24 +311,35 @@ export default function ProjectsSection() {
 
       {/* Projects Grid / Stack */}
       <div ref={containerRef} className="relative min-h-[400px]">
-        <motion.div
-          layout
-          className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-        >
+        {/* Invisible Grid for exact pixel measurements (Desktop only) */}
+        {!isMobile && (
+          <div ref={gridRef} className="grid gap-5 grid-cols-2 lg:grid-cols-3 opacity-0 pointer-events-none" aria-hidden="true">
+            {filteredProjects.map((project) => (
+              <div key={`dummy-${project.title}`} className="w-full rounded-2xl border border-transparent">
+                <ProjectCardContent project={project} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Animated Cards */}
+        <div className={isMobile ? "grid grid-cols-1 gap-5" : "absolute inset-0 pointer-events-none"}>
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => (
-              <AnimatedProjectCard
-                key={project.title}
-                project={project}
-                index={index}
-                totalItems={filteredProjects.length}
-                columns={columns}
-                scrollYProgress={scrollYProgress}
-                onClick={setSelectedProject}
-              />
+              <div key={project.title} className={!isMobile ? "pointer-events-auto" : ""}>
+                <AnimatedProjectCard
+                  project={project}
+                  index={index}
+                  totalItems={filteredProjects.length}
+                  data={transformData[index]}
+                  scrollYProgress={scrollYProgress}
+                  isMobile={isMobile}
+                  onClick={setSelectedProject}
+                />
+              </div>
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
 
       {/* Project Detail Modal */}
