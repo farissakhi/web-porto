@@ -173,11 +173,16 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
   const x = isMobile ? 0 : desktopX;
   const y = isMobile ? mobileY : desktopY;
 
-  // Stacked state rotation (messy deck of cards)
-  const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 3 : -index * 3);
+  // Rotation and Scale for the "emerging from behind" effect
+  const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 2 : -index * 2);
   const rotate = useTransform(scrollYProgress, [startScroll, endScroll], [stackedRotate, 0]);
-  const scale = useTransform(scrollYProgress, [startScroll, endScroll], [isMobile ? 1 : Math.max(1 - index * 0.02, 0.85), 1]);
-  const opacity = useTransform(scrollYProgress, [startScroll, endScroll], [isMobile ? 0 : 1, 1]);
+  
+  // Scale from very small (hidden behind heading) to full size
+  const stackedScale = isMobile ? 1 : 0.3;
+  const scale = useTransform(scrollYProgress, [startScroll, endScroll], [stackedScale, 1]);
+  
+  // Fade in as it emerges
+  const opacity = useTransform(scrollYProgress, [startScroll, endScroll], [0, 1]);
 
   return (
     <motion.div
@@ -230,9 +235,8 @@ export default function ProjectsSection() {
   // Track scroll through the section to drive the animation
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    // Start spreading when the top of the container hits 60% of viewport (user sees the stack clearly)
-    // Finish spreading when it hits 10% (near the top)
-    offset: ["0 60%", "0 10%"],
+    // Start spreading earlier and finish later for a smoother, longer animation
+    offset: ["0 85%", "0 10%"],
   });
 
   const filteredProjects =
@@ -243,6 +247,8 @@ export default function ProjectsSection() {
   React.useEffect(() => {
     if (!gridRef.current || !containerRef.current) return;
 
+    let timeoutId: NodeJS.Timeout;
+
     const measure = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
@@ -252,6 +258,17 @@ export default function ProjectsSection() {
       const cRect = containerRef.current!.getBoundingClientRect();
       const cells = Array.from(gridRef.current!.children);
       
+      // Calculate heading position if available, to stack behind it
+      const headingEl = document.getElementById("projects-heading");
+      let hCenterY = 0;
+      let hCenterX = cRect.width / 2;
+
+      if (headingEl) {
+        const hRect = headingEl.getBoundingClientRect();
+        hCenterY = hRect.top - cRect.top + (hRect.height / 2);
+        hCenterX = hRect.left - cRect.left + (hRect.width / 2);
+      }
+      
       const data = cells.map(cell => {
         const rect = cell.getBoundingClientRect();
         return {
@@ -259,29 +276,36 @@ export default function ProjectsSection() {
           y: rect.top - cRect.top,
           width: rect.width,
           height: rect.height,
-          stackX: cRect.width / 2 - rect.width / 2, // Stack in exact center X
-          stackY: 0, // Stack at top of grid
+          stackX: hCenterX - (rect.width / 2),
+          stackY: hCenterY - (rect.height / 2), // Stack exactly behind the center of the heading
         };
       });
       setTransformData(data);
     };
 
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(gridRef.current);
+    // Wait a brief moment for layout to settle, especially if fonts are loading
+    timeoutId = setTimeout(measure, 50);
+
+    // Use normal window resize instead of ResizeObserver to prevent scroll-triggered stuttering on mobile
+    window.addEventListener("resize", measure);
     
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", measure);
+    };
   }, [filteredProjects]);
 
   return (
     <SectionWrapper id="projects">
-      <SectionHeading
-        title="Projects"
-        subtitle="A selection of projects I've built and contributed to"
-      />
+      <div id="projects-heading" className="relative z-50">
+        <SectionHeading
+          title="Projects"
+          subtitle="A selection of projects I've built and contributed to"
+        />
+      </div>
 
       {/* Filter Tabs with animated indicator */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-12 relative z-50">
         {projectCategories.map((cat) => (
           <button
             key={cat.value}
