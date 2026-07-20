@@ -20,14 +20,7 @@ export default function SectionWrapper({
       className={`relative scroll-mt-6 ${className}`}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: "easeOut" as const }}
-        >
-          {children}
-        </motion.div>
+        {children}
       </div>
       <div className="section-divider" />
     </section>
@@ -45,7 +38,13 @@ export function SectionHeading({
   gradient?: boolean;
 }) {
   return (
-    <div className="mb-12 md:mb-16 text-center">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" as const }}
+      className="mb-12 md:mb-16 text-center"
+    >
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
         {gradient ? (
           <span className="bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
@@ -60,6 +59,6 @@ export function SectionHeading({
           {subtitle}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }
