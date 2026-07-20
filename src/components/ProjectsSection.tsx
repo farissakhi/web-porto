@@ -152,45 +152,26 @@ function ProjectCardContent({ project }: { project: any }) {
 }
 
 function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress, isMobile, onClick }: any) {
+  // data contains { startX, startY } relative to this card's native grid position
   const isReady = !!data;
+  const startX = data ? data.startX : 0;
+  const startY = data ? data.startY : 0;
 
-  // Remove stagger to ensure all cards move perfectly in sync with the scroll,
-  // which prevents the visual "patah-patah" (stuttering) caused by cards starting/stopping at different times.
-  const startScroll = 0;
-  const endScroll = 1;
+  // Animate from stack offset to (0,0) native grid position
+  const x = useTransform(scrollYProgress, [0, 1], [isMobile ? 0 : startX, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [isMobile ? 50 : startY, 0]);
 
-  const startX = data ? data.stackX : 0;
-  const startY = data ? data.stackY : 0;
-  const endX = data ? data.x : 0;
-  const endY = data ? data.y : 0;
-
-  // On mobile, just simple vertical fade/slide. On desktop, stack and spread.
-  const mobileY = useTransform(scrollYProgress, [startScroll, endScroll], [50, 0]);
-  const desktopX = useTransform(scrollYProgress, [startScroll, endScroll], [startX, endX]);
-  const desktopY = useTransform(scrollYProgress, [startScroll, endScroll], [startY, endY]);
-
-  const x = isMobile ? 0 : desktopX;
-  const y = isMobile ? mobileY : desktopY;
-
-  // Rotation and Scale for the "emerging from behind" effect
   const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 2 : -index * 2);
-  const rotate = useTransform(scrollYProgress, [startScroll, endScroll], [stackedRotate, 0]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [stackedRotate, 0]);
   
-  // Scale from slightly smaller so it looks like a deck
   const stackedScale = isMobile ? 1 : 0.9;
-  const scale = useTransform(scrollYProgress, [startScroll, endScroll], [stackedScale, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [stackedScale, 1]);
   
-  // Keep it fully visible so the user actually sees the stack waiting behind the text!
-  const opacity = isMobile ? useTransform(scrollYProgress, [startScroll, endScroll], [0, 1]) : 1;
+  const opacity = isMobile ? useTransform(scrollYProgress, [0, 1], [0, 1]) : 1;
 
   return (
     <motion.div
       style={{
-        position: isMobile ? "relative" : "absolute",
-        top: 0,
-        left: 0,
-        width: isMobile ? "100%" : data?.width || "100%",
-        height: isMobile ? "auto" : data?.height || "auto",
         x,
         y,
         rotate,
@@ -202,7 +183,7 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
       }}
       whileHover={isReady ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
       onClick={() => onClick(project)}
-      className="group rounded-2xl bg-card border border-border overflow-hidden
+      className="group w-full rounded-2xl bg-card border border-border overflow-hidden
                  hover:border-muted-foreground/20
                  hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.5),0_0_20px_rgba(52,211,153,0.12),0_0_20px_rgba(34,211,238,0.08)]
                  transition-[border-color,box-shadow] duration-300 cursor-pointer"
@@ -213,12 +194,8 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
 }
 
 type TransformData = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  stackX: number;
-  stackY: number;
+  startX: number;
+  startY: number;
 };
 
 export default function ProjectsSection() {
@@ -259,29 +236,28 @@ export default function ProjectsSection() {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       
-      if (mobile) return; // Skip measurement on mobile
+      if (mobile) return; // Skip on mobile
 
       const cRect = containerRef.current!.getBoundingClientRect();
       const cells = Array.from(gridRef.current!.children);
       
+      // We want all cards to originate from the top-center of the container
+      const targetStackX = cRect.left + (cRect.width / 2);
+      const targetStackY = cRect.top; // Just under the tabs
+
       const data = cells.map(cell => {
         const rect = cell.getBoundingClientRect();
-        return {
-          x: rect.left - cRect.left,
-          y: rect.top - cRect.top,
-          width: rect.width,
-          height: rect.height,
-          stackX: (cRect.width / 2) - (rect.width / 2),
-          stackY: 0, // Stack exactly at the top of the grid, perfectly below the tabs
-        };
+        
+        // Calculate the translation needed to move the card FROM its native grid position TO the stack position
+        const startX = targetStackX - (rect.left + rect.width / 2);
+        const startY = targetStackY - rect.top;
+        
+        return { startX, startY };
       });
       setTransformData(data);
     };
 
-    // Wait a brief moment for layout to settle, especially if fonts are loading
-    timeoutId = setTimeout(measure, 50);
-
-    // Use normal window resize instead of ResizeObserver to prevent scroll-triggered stuttering on mobile
+    timeoutId = setTimeout(measure, 100);
     window.addEventListener("resize", measure);
     
     return () => {
@@ -336,32 +312,20 @@ export default function ProjectsSection() {
 
       {/* Projects Grid / Stack */}
       <div ref={containerRef} className="relative min-h-[400px]">
-        {/* Invisible Grid for exact pixel measurements (Desktop only) */}
-        {!isMobile && (
-          <div ref={gridRef} className="grid gap-5 grid-cols-2 lg:grid-cols-3 opacity-0 pointer-events-none" aria-hidden="true">
-            {filteredProjects.map((project) => (
-              <div key={`dummy-${project.title}`} className="w-full rounded-2xl border border-transparent">
-                <ProjectCardContent project={project} />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Animated Cards */}
-        <div className={isMobile ? "grid grid-cols-1 gap-5" : "absolute inset-0 pointer-events-none"}>
+        {/* Animated Cards rendered natively in their grid */}
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
           <AnimatePresence>
             {filteredProjects.map((project, index) => (
-              <div key={project.title} className={!isMobile ? "pointer-events-auto" : ""}>
-                <AnimatedProjectCard
-                  project={project}
-                  index={index}
-                  totalItems={filteredProjects.length}
-                  data={transformData[index]}
-                  scrollYProgress={smoothProgress}
-                  isMobile={isMobile}
-                  onClick={setSelectedProject}
-                />
-              </div>
+              <AnimatedProjectCard
+                key={project.title}
+                project={project}
+                index={index}
+                totalItems={filteredProjects.length}
+                data={transformData[index]}
+                scrollYProgress={smoothProgress}
+                isMobile={isMobile}
+                onClick={setSelectedProject}
+              />
             ))}
           </AnimatePresence>
         </div>
