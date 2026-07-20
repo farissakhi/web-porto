@@ -164,10 +164,12 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
   const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 2 : -index * 2);
   const rotate = useTransform(scrollYProgress, [0, 1], [stackedRotate, 0]);
   
-  const stackedScale = isMobile ? 1 : 0.9;
+  // Scale from very small so they fit perfectly hidden behind the text, then grow as they slide out
+  const stackedScale = isMobile ? 1 : 0.2;
   const scale = useTransform(scrollYProgress, [0, 1], [stackedScale, 1]);
   
-  const opacity = isMobile ? useTransform(scrollYProgress, [0, 1], [0, 1]) : 1;
+  // Fade in during the first 30% of the animation so they seem to materialize from behind the text
+  const opacity = isMobile ? useTransform(scrollYProgress, [0, 1], [0, 1]) : useTransform(scrollYProgress, [0, 0.3, 1], [0, 1, 1]);
 
   return (
     <motion.div
@@ -211,8 +213,9 @@ export default function ProjectsSection() {
   // Track scroll through the section to drive the animation
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    // Start spreading earlier and finish later for a smoother, longer animation
-    offset: ["0 85%", "0 10%"],
+    // Start at 85% (when it enters view), finish at 55% (barely half screen) 
+    // so it finishes VERY fast as requested
+    offset: ["0 85%", "0 55%"],
   });
 
   // Apply a spring to the scroll progress to completely eliminate mouse wheel stuttering
@@ -241,16 +244,26 @@ export default function ProjectsSection() {
       const cRect = containerRef.current!.getBoundingClientRect();
       const cells = Array.from(gridRef.current!.children);
       
-      // We want all cards to originate from the top-center of the container
-      const targetStackX = cRect.left + (cRect.width / 2);
-      const targetStackY = cRect.top; // Just under the tabs
+      // Find the exact center of the "Projects" heading
+      const headingEl = document.getElementById("projects-heading");
+      let targetStackY = cRect.top;
+      let targetStackX = cRect.left + (cRect.width / 2);
+
+      if (headingEl) {
+        const hRect = headingEl.getBoundingClientRect();
+        targetStackY = hRect.top - cRect.top + (hRect.height / 2);
+        targetStackX = hRect.left - cRect.left + (hRect.width / 2);
+      } else {
+        targetStackX = cRect.width / 2;
+        targetStackY = 0;
+      }
 
       const data = cells.map(cell => {
         const rect = cell.getBoundingClientRect();
         
-        // Calculate the translation needed to move the card FROM its native grid position TO the stack position
-        const startX = targetStackX - (rect.left + rect.width / 2);
-        const startY = targetStackY - rect.top;
+        // Calculate the translation needed to move the card FROM its native grid position TO the stack position behind the heading
+        const startX = targetStackX - (rect.left - cRect.left + rect.width / 2);
+        const startY = targetStackY - (rect.top - cRect.top + rect.height / 2);
         
         return { startX, startY };
       });
