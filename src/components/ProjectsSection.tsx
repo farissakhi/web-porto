@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import { projects, projectCategories, type ProjectCategory, type Project } from "@/data/projects";
 import SectionWrapper, { SectionHeading } from "./SectionWrapper";
@@ -177,12 +177,12 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
   const stackedRotate = isMobile ? 0 : (index % 2 === 0 ? index * 2 : -index * 2);
   const rotate = useTransform(scrollYProgress, [startScroll, endScroll], [stackedRotate, 0]);
   
-  // Scale from very small (hidden behind heading) to full size
-  const stackedScale = isMobile ? 1 : 0.3;
+  // Scale from slightly smaller so it looks like a deck behind the text
+  const stackedScale = isMobile ? 1 : 0.8;
   const scale = useTransform(scrollYProgress, [startScroll, endScroll], [stackedScale, 1]);
   
-  // Fade in as it emerges
-  const opacity = useTransform(scrollYProgress, [startScroll, endScroll], [0, 1]);
+  // Keep it fully visible so the user actually sees the stack waiting behind the text!
+  const opacity = isMobile ? useTransform(scrollYProgress, [startScroll, endScroll], [0, 1]) : 1;
 
   return (
     <motion.div
@@ -237,6 +237,13 @@ export default function ProjectsSection() {
     target: containerRef,
     // Start spreading earlier and finish later for a smoother, longer animation
     offset: ["0 85%", "0 10%"],
+  });
+
+  // Apply a spring to the scroll progress to completely eliminate mouse wheel stuttering
+  const smoothProgress = useSpring(scrollYProgress, {
+    damping: 25,
+    stiffness: 120,
+    mass: 0.2
   });
 
   const filteredProjects =
@@ -356,7 +363,7 @@ export default function ProjectsSection() {
                   index={index}
                   totalItems={filteredProjects.length}
                   data={transformData[index]}
-                  scrollYProgress={scrollYProgress}
+                  scrollYProgress={smoothProgress}
                   isMobile={isMobile}
                   onClick={setSelectedProject}
                 />
