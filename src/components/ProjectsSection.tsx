@@ -186,7 +186,6 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
 
   return (
     <motion.div
-      layoutId={`card-${project.title}`}
       style={{
         position: isMobile ? "relative" : "absolute",
         top: 0,
@@ -199,7 +198,8 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
         scale,
         opacity,
         zIndex: totalItems - index,
-        visibility: (isReady || isMobile) ? "visible" : "hidden"
+        visibility: (isReady || isMobile) ? "visible" : "hidden",
+        willChange: "transform",
       }}
       whileHover={isReady ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
       onClick={() => onClick(project)}
@@ -348,7 +348,7 @@ export default function ProjectsSection() {
 
         {/* Animated Cards */}
         <div className={isMobile ? "grid grid-cols-1 gap-5" : "absolute inset-0 pointer-events-none"}>
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence>
             {filteredProjects.map((project, index) => (
               <div key={project.title} className={!isMobile ? "pointer-events-auto" : ""}>
                 <AnimatedProjectCard
