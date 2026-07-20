@@ -189,10 +189,7 @@ function AnimatedProjectCard({ project, index, totalItems, data, scrollYProgress
 
   return (
     <motion.div
-      layout={!isActiveFilterAll}
-      initial={!isActiveFilterAll ? { opacity: 0, scale: 0.9, y: 20 } : undefined}
-      animate={!isActiveFilterAll ? { opacity: 1, scale: 1, y: 0 } : undefined}
-      exit={!isActiveFilterAll ? { opacity: 0, scale: 0.9, y: 20 } : undefined}
+      layout={false}
       transition={{ duration: 0.4 }}
       style={motionStyle as any}
       whileHover={isReady ? { scale: 1.02, transition: { duration: 0.2 } } : undefined}
