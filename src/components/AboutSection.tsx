@@ -22,7 +22,33 @@ const statsItemVariants = {
   },
 };
 
+const wordContainer = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const,
+      staggerChildren: 0.02,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const wordVariant = {
+  hidden: { opacity: 0, y: 10, filter: "blur(2px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.3, ease: "easeOut" as const },
+  },
+};
+
 export default function AboutSection() {
+  const aboutWords = profile.aboutText?.split(" ") || [];
+
   return (
     <SectionWrapper id="about">
       <SectionHeading
@@ -33,31 +59,43 @@ export default function AboutSection() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
         {/* Left: About text */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          variants={wordContainer}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5, ease: "easeOut" as const }}
           className="lg:col-span-3"
         >
           <div className="space-y-4">
-            <div className="flex items-center gap-3 mb-6">
+            <motion.div variants={wordVariant} className="flex items-center gap-3 mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                 Who am I
               </span>
               <div className="flex-1 h-px bg-border" />
-            </div>
+            </motion.div>
 
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-              {profile.aboutText || (
+            {profile.aboutText ? (
+              <div className="text-base sm:text-lg text-muted-foreground leading-relaxed flex flex-wrap">
+                {aboutWords.map((word, i) => (
+                  <motion.span
+                    key={i}
+                    variants={wordVariant}
+                    className="mr-[0.25em]"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 <span className="italic text-muted-foreground/50">
                   Your story goes here — tell the world about your background,
                   what drives your passion for development, and what makes you
                   unique. Edit the <code className="text-xs bg-muted px-1.5 py-0.5 rounded">aboutText</code> field
                   in <code className="text-xs bg-muted px-1.5 py-0.5 rounded">src/data/profile.ts</code> to get started.
                 </span>
-              )}
-            </p>
+              </p>
+            )}
           </div>
         </motion.div>
 
