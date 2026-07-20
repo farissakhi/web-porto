@@ -72,23 +72,26 @@ export default function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="absolute inset-0 z-0 flex items-end justify-center lg:justify-end lg:pr-[10%]"
+        className="absolute inset-0 z-0 flex items-center justify-center"
       >
         <div 
-          className="relative w-[150vw] h-[85vh] sm:w-[90vw] md:w-[75vw] lg:w-[60vw] lg:h-[95vh]"
+          className="relative w-full h-full min-h-screen"
           style={{
-            maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
           }}
         >
           <Image
             src={profile.profileImage}
             alt={profile.name}
             fill
-            sizes="(max-width: 1024px) 100vw, 60vw"
-            className="object-cover object-top lg:object-center grayscale-[20%]" // slight grayscale to match the b&w mood
+            quality={100}
+            sizes="100vw"
+            className="object-cover object-[70%_top] lg:object-[75%_center] grayscale-[20%]"
             priority
           />
+          {/* Gradient overlay on the left for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent w-[85%] md:w-[65%]" />
         </div>
       </motion.div>
 
