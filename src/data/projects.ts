@@ -65,8 +65,8 @@ export const projects: Project[] = [
     title: "Smart AI Image Editor",
     description:
       "Aplikasi web pengolahan gambar interaktif dengan fitur AI, mendukung manipulasi gambar real-time, undo/redo, dan operasi file.",
-    image: "/projects/smart-ai-editor/screenshot-1.png",
-    illustration: "smart-ai-editor",
+    image: "/projects/smart-ai-editor/screenshot-2.png",
+    // illustration: "smart-ai-editor", // Dinonaktifkan agar screenshot muncul sebagai thumbnail
     category: "ai-ml",
     githubUrl: "",
     techStack: ["Python", "OpenCV", "Flask", "NumPy", "Deep Learning (DNN)"],
