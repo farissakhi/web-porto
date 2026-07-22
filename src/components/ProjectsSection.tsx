@@ -61,7 +61,7 @@ function ProjectCardContent({ project }: { project: any }) {
               alt={`${project.title} screenshot`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover"
+              className="object-contain"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-white/[0.03] via-card to-white/[0.02] flex items-center justify-center">
