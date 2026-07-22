@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiX, FiDownload, FiSun, FiMoon } from "react-icons/fi";
-import { useTheme } from "./ThemeProvider";
+import { FiX, FiDownload } from "react-icons/fi";
 import { profile } from "@/data/profile";
 import SocialIcons from "./SocialIcons";
 
@@ -14,7 +13,6 @@ interface MobileMenuDrawerProps {
 }
 
 export default function MobileMenuDrawer({ isOpen, onClose, activeSection }: MobileMenuDrawerProps) {
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     if (isOpen) {
@@ -99,16 +97,7 @@ export default function MobileMenuDrawer({ isOpen, onClose, activeSection }: Mob
               <div className="flex flex-col gap-4 px-2">
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Options</span>
                 
-                <button
-                  onClick={toggleTheme}
-                  className="flex items-center justify-between py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <span>Theme</span>
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted border border-border">
-                    {theme === "dark" ? <FiMoon size={14} /> : <FiSun size={14} />}
-                    <span className="text-xs">{theme === "dark" ? "Dark" : "Light"}</span>
-                  </div>
-                </button>
+
 
                 <a
                   href={profile.cvDrivePreview || profile.cvFile}

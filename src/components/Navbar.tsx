@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { FiSun, FiMoon, FiMenu, FiX, FiDownload } from "react-icons/fi";
-import { useTheme } from "./ThemeProvider";
+import { FiMenu, FiX, FiDownload } from "react-icons/fi";
 import { profile } from "@/data/profile";
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useTheme();
   const [isShrunk, setIsShrunk] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
@@ -143,34 +141,6 @@ export default function Navbar() {
 
           {/* Right side: Theme toggle + Hire Me */}
           <div className="hidden md:flex items-center gap-2">
-            <motion.button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              animate={{
-                width: isShrunk && !isHovered && !mobileOpen ? "24px" : "32px",
-                height: isShrunk && !isHovered && !mobileOpen ? "24px" : "32px",
-              }}
-              className="flex items-center justify-center rounded-full border border-border
-                         hover:border-muted-foreground/40 hover:bg-muted transition-all duration-300"
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={theme}
-                  initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                  exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {theme === "dark" ? (
-                    <FiSun size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} className="text-muted-foreground" />
-                  ) : (
-                    <FiMoon size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} className="text-muted-foreground" />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </motion.button>
 
             <motion.a
               href="#contact"
@@ -195,21 +165,6 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-2">
-            <motion.button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              animate={{
-                width: isShrunk && !isHovered && !mobileOpen ? "28px" : "32px",
-                height: isShrunk && !isHovered && !mobileOpen ? "28px" : "32px",
-              }}
-              className="flex items-center justify-center rounded-full border border-border transition-all"
-            >
-              {theme === "dark" ? (
-                <FiSun size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} />
-              ) : (
-                <FiMoon size={isShrunk && !isHovered && !mobileOpen ? 12 : 14} />
-              )}
-            </motion.button>
             <motion.button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
