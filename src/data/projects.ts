@@ -153,6 +153,27 @@ export const projects: Project[] = [
       "/projects/keshir/screenshot-13.png",
     ],
   },
+  {
+    title: "Nakama Skin AI",
+    description:
+      "Platform rekomendasi perawatan kulit dan dermatologi berbasis AI yang menyediakan analisis kondisi kulit wajah secara real-time menggunakan model computer vision YOLOv8.",
+    image: "/projects/nakama_skincare-main/screenshot-6.png",
+    category: "ai-ml",
+    githubUrl: "https://github.com/arda2v/nakama_skincare",
+    techStack: ["Next.js", "Tailwind CSS", "Python", "Flask", "YOLOv8"],
+    longDescription:
+      "Aplikasi full-stack untuk analisis dermatologi. Frontend dibangun dengan Next.js dan Tailwind CSS, menyediakan dashboard bergaya klinis dan pelacakan webcam real-time menggunakan Canvas. Backend menggunakan Python Flask untuk menyajikan model Ultralytics YOLOv8 yang mendeteksi anomali kulit (jerawat, pori-pori membesar) secara real-time. Sistem ini mendukung penilaian langsung melalui webcam maupun unggahan foto statis beresolusi tinggi, dan menyajikan hasil beserta tingkat keparahan serta rekomendasi perawatan kulit dinamis berdasarkan hasil deteksi dan kuesioner gaya hidup pengguna.",
+    goal:
+      "Memberikan akses yang mudah untuk analisis kondisi kulit wajah secara real-time dan memberikan rekomendasi perawatan kulit (skincare) yang dipersonalisasi menggunakan AI.",
+    gallery: [
+      "/projects/nakama_skincare-main/screenshot-1.png",
+      "/projects/nakama_skincare-main/screenshot-2.png",
+      "/projects/nakama_skincare-main/screenshot-3.png",
+      "/projects/nakama_skincare-main/screenshot-4.png",
+      "/projects/nakama_skincare-main/screenshot-5.png",
+      "/projects/nakama_skincare-main/screenshot-6.png",
+    ],
+  },
 ];
 
 export const projectCategories = [
