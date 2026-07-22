@@ -220,6 +220,7 @@ type TransformData = {
 export default function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<"all" | ProjectCategory>("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const gridRef = React.useRef<HTMLDivElement>(null);
@@ -246,6 +247,8 @@ export default function ProjectsSection() {
     activeFilter === "all"
       ? projects
       : projects.filter((p) => p.category === activeFilter);
+
+  const displayedProjects = showAll ? filteredProjects : filteredProjects.slice(0, 6);
 
   React.useEffect(() => {
     if (!gridRef.current || !containerRef.current) return;
@@ -294,7 +297,7 @@ export default function ProjectsSection() {
       clearTimeout(timeoutId);
       window.removeEventListener("resize", measure);
     };
-  }, [filteredProjects]);
+  }, [activeFilter, showAll]);
 
   return (
     <SectionWrapper id="projects">
@@ -316,7 +319,10 @@ export default function ProjectsSection() {
         {projectCategories.map((cat) => (
           <button
             key={cat.value}
-            onClick={() => setActiveFilter(cat.value as "all" | ProjectCategory)}
+            onClick={() => {
+              setActiveFilter(cat.value as "all" | ProjectCategory);
+              setShowAll(false);
+            }}
             className={`relative px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-300
               ${
                 activeFilter === cat.value
@@ -345,12 +351,12 @@ export default function ProjectsSection() {
         {/* Animated Cards rendered natively in their grid */}
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
           <AnimatePresence>
-            {filteredProjects.map((project, index) => (
+            {displayedProjects.map((project, index) => (
               <AnimatedProjectCard
                 key={project.title}
                 project={project}
                 index={index}
-                totalItems={filteredProjects.length}
+                totalItems={displayedProjects.length}
                 data={transformData[index]}
                 scrollYProgress={smoothProgress}
                 isMobile={isMobile}
@@ -361,6 +367,18 @@ export default function ProjectsSection() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Show More / Show Less Button */}
+      {filteredProjects.length > 6 && (
+        <div className="flex justify-center mt-12 relative z-50">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="px-6 py-2.5 rounded-full text-sm font-medium border border-border text-foreground hover:bg-muted hover:border-muted-foreground/30 transition-all duration-300"
+          >
+            {showAll ? "Show Less" : "Show More"}
+          </button>
+        </div>
+      )}
 
       {/* Project Detail Modal */}
       <ProjectModal
