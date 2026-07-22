@@ -55,9 +55,9 @@ function ProjectCardContent({ project }: { project: any }) {
                 </div>
               );
             })()
-          ) : project.gallery.length > 0 ? (
+          ) : project.image || project.gallery.length > 0 ? (
             <Image
-              src={project.gallery[0]}
+              src={project.image || project.gallery[0]}
               alt={`${project.title} screenshot`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
